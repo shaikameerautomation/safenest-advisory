@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeNest — Advisor Intelligence Portal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+</head>
+<body style="margin:0;padding:0;background:#0A0A0A;">
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+const COLORS = {
+  charcoal: "#0A0A0A",
+  gold: "#C9A84C",
+  goldLight: "#E8C96A",
+  goldDim: "#8A6F2E",
+  cream: "#F5F0E8",
+  surface: "#141414",
+  surface2: "#1C1C1C",
+  surface3: "#242424",
+  border: "#2A2A2A",
+  text: "#E8E8E8",
+  textMuted: "#888",
+  red: "#C0392B",
+  amber: "#E67E22",
+  green: "#27AE60",
+};
+
+const PROJECTS = [
+  {
+    id: 1, name: "Prestige Lakeside Habitat", developer: "Prestige Group",
+    microMarket: "Kokapet", segment: "Ultra Luxury", type: "Apartment",
+    sizeSft: 3200, psf: 9500, gstApplicable: false,
+    handoverMonths: 3, stage: "OC Stage", rating: "AAA", score: 9.1,
+    verdict: "Highly Favorable", purpose: ["End-use", "Investment"],
+    bedrooms: [3, 4], priceMin: 2.8, priceMax: 3.5,
+    rentalYield: 22, flags: { red: 0, amber: 1 },
+    highlights: ["OC received — immediate possession", "Prestige track record — zero delays", "Lake-facing units available"],
+    caution: "Premium pricing — limited negotiation headroom",
+  },
+  {
+    id: 2, name: "Lansum El Palacio", developer: "Lansum Properties",
+    microMarket: "Kokapet", segment: "Luxury", type: "Apartment",
+    sizeSft: 2800, psf: 8200, gstApplicable: false,
+    handoverMonths: 6, stage: "Finishing Stage", rating: "AA", score: 8.1,
+    verdict: "Highly Favorable", purpose: ["End-use", "Investment"],
+    bedrooms: [3, 4], priceMin: 2.1, priceMax: 2.6,
+    rentalYield: 19, flags: { red: 0, amber: 1 },
+    highlights: ["6-month possession — near zero pre-EMI exposure", "Spanish architecture — genuine USP", "HDFC approved"],
+    caution: "Finishing-stage site visit recommended before booking",
+  },
+  {
+    id: 3, name: "Vian Serene Heights", developer: "Vian Properties",
+    microMarket: "Tellapur", segment: "Luxury", type: "Villa",
+    sizeSft: 2400, psf: 7200, gstApplicable: false,
+    handoverMonths: 9, stage: "Finishing Stage", rating: "A", score: 7.2,
+    verdict: "Favorable", purpose: ["End-use"],
+    bedrooms: [3, 4], priceMin: 1.6, priceMax: 1.9,
+    rentalYield: 17, flags: { red: 0, amber: 2 },
+    highlights: ["Independent villa — low density", "Tellapur corridor momentum", "Finishing stage — 9 months to possession"],
+    caution: "Vian is Tier 4 — verify escrow compliance independently",
+  },
+  {
+    id: 4, name: "IRA Windermere", developer: "IRA Realty",
+    microMarket: "Kollur", segment: "Premium", type: "Apartment",
+    sizeSft: 1800, psf: 6800, gstApplicable: true,
+    handoverMonths: 24, stage: "Structure WIP >50%", rating: "A", score: 6.9,
+    verdict: "Favorable", purpose: ["Investment", "End-use"],
+    bedrooms: [3], priceMin: 1.1, priceMax: 1.35,
+    rentalYield: 16, flags: { red: 0, amber: 2 },
+    highlights: ["Structure >50% — de-risked construction", "Kollur ORR access — strong rental demand", "SBI approved"],
+    caution: "24 months handover — pre-EMI interest cost significant",
+  },
+  {
+    id: 5, name: "Vaishno Valley View", developer: "Vaishno Ventures",
+    microMarket: "Narsingi", segment: "Premium", type: "Apartment",
+    sizeSft: 1600, psf: 6200, gstApplicable: true,
+    handoverMonths: 30, stage: "Structure WIP <50%", rating: "BBB", score: 5.9,
+    verdict: "Conditional", purpose: ["Investment"],
+    bedrooms: [2, 3], priceMin: 0.9, priceMax: 1.1,
+    rentalYield: 15, flags: { red: 0, amber: 3 },
+    highlights: ["Entry price point — Narsingi corridor", "Price appreciation upside if ORR expansion materialises"],
+    caution: "Structure <50% — 30 months is optimistic. Budget for 36.",
+  },
+  {
+    id: 6, name: "Praneeth Pranav Green Acres", developer: "Praneeth Group",
+    microMarket: "Mokila", segment: "Premium", type: "Villa Plot",
+    sizeSft: 200, psf: 5500, gstApplicable: true,
+    handoverMonths: 42, stage: "Foundation Stage", rating: "BBB", score: 5.6,
+    verdict: "Conditional", purpose: ["Investment"],
+    bedrooms: [], priceMin: 0.6, priceMax: 0.85,
+    rentalYield: 0, flags: { red: 1, amber: 2 },
+    highlights: ["Lowest entry point in Mokila", "Plot — no construction risk on asset"],
+    caution: "Praneeth watch-listed for poor customer reviews. RED flag active.",
+  },
+  {
+    id: 7, name: "Prestige Primrose Hills", developer: "Prestige Group",
+    microMarket: "Tellapur", segment: "Ultra Luxury", type: "Villa",
+    sizeSft: 3800, psf: 8800, gstApplicable: false,
+    handoverMonths: 2, stage: "OC Stage", rating: "AAA", score: 9.3,
+    verdict: "Highly Favorable", purpose: ["End-use", "Investment"],
+    bedrooms: [4, 5], priceMin: 3.1, priceMax: 4.0,
+    rentalYield: 23, flags: { red: 0, amber: 0 },
+    highlights: ["OC received — zero pre-EMI exposure", "Prestige AAA rating — cleanest project on corridor", "Immediate rental income possible"],
+    caution: "Premium segment — buyer must validate personal liquidity",
+  },
+];
+
+const OPPORTUNITIES = [
+  {
+    id: 1, type: "Builder Leftover",
+    title: "IRA Windermere — Last 4 Units",
+    project: "IRA Windermere", microMarket: "Kollur",
+    units: 4, psf: 6800, originalPsf: 6800,
+    monthsSinceRevision: 16,
+    marketPsf: 7600,
+    gap: 10.5,
+    description: "Builder has 4 units remaining across floors 8 and 11. Project is 96% sold. IRA has launched a new project at Tellapur at ₹8,200/sft — no motivation to revise Windermere pricing. Last price revision: 16 months ago.",
+    whyAvail: "Market has moved to ₹7,600/sft in Kollur. These units are effectively at a 10.5% discount to current market. Builder will negotiate registration charges and car parking on last units. Estimated saving: ₹9–12 lacs on a ₹1.2 Cr ticket.",
+    expiry: "2026-05-15",
+    contact: "Rajesh Kumar, IRA Sales Head — 9849XXXXXX",
+  },
+  {
+    id: 2, type: "Landlord Share",
+    title: "Vaishno Valley View — Landowner Exit Units",
+    project: "Vaishno Valley View", microMarket: "Narsingi",
+    units: 6, psf: 5700, originalPsf: 6200,
+    monthsSinceRevision: 8,
+    marketPsf: 6200,
+    gap: 8.1,
+    description: "Landowner (Mr. Suresh Reddy) holds 6 units as part of the JV revenue share. He is motivated to liquidate before possession — personal liquidity requirement. Units are 2 BHK (1,600 sft). Title is clean — verified through JV agreement on RERA portal.",
+    whyAvail: "8% below current builder price. No GST on landowner share units (GST is builder's liability, not landowner's on revenue share). Effective saving of ₹5–7 lacs vs buying from builder. Buyer gets same RERA protection — allotment transfers via registered assignment.",
+    expiry: "2026-04-30",
+    contact: "Direct — coordinate through SafeNest only",
+  },
+  {
+    id: 3, type: "Builder Leftover",
+    title: "Praneeth Green Acres — 2 Corner Penthouses",
+    project: "Praneeth Pranav Green Acres", microMarket: "Mokila",
+    units: 2, psf: 5500, originalPsf: 5500,
+    monthsSinceRevision: 22,
+    marketPsf: 6400,
+    gap: 14.1,
+    description: "Two top-floor penthouse units (3,200 sft each) unsold since launch. Praneeth has pivoted focus to their new Patancheru project. Pricing has not been revised in 22 months despite market moving significantly. Builder motivated to close — one-time EOI acceptance window.",
+    whyAvail: "14% below current Mokila market rate for comparable product. At ₹5,500/sft vs market ₹6,400/sft — saving of ₹28+ lacs on a ₹1.76 Cr ticket. NOTE: Praneeth is watch-listed for customer review concerns. Advise buyer to insist on escrow verification and legal title check before booking.",
+    expiry: "2026-05-31",
+    contact: "Ameer to coordinate directly — do not share builder contact with buyer",
+  },
+];
+
+const SEGMENTS = ["All", "Ultra Luxury", "Luxury", "Premium"];
+const MICRO_MARKETS = ["All", "Kokapet", "Tellapur", "Kollur", "Narsingi", "Mokila", "Patancheru"];
+const PURPOSES = ["End-use", "Investment"];
+
+const ratingColor = (r) => ({ AAA: COLORS.green, AA: COLORS.green, A: "#2ECC71", BBB: COLORS.amber, BB: COLORS.amber, B: COLORS.red }[r] || COLORS.textMuted);
+const verdictColor = (v) => ({ "Highly Favorable": COLORS.green, "Favorable": "#2ECC71", "Conditional": COLORS.amber, "Unfavorable": COLORS.red }[v] || COLORS.textMuted);
+const stageColor = (s) => ({ "OC Stage": COLORS.green, "Finishing Stage": "#2ECC71", "Structure WIP >50%": COLORS.amber, "Structure WIP <50%": COLORS.amber, "Foundation Stage": COLORS.red }[s] || COLORS.textMuted);
+
+const fmt = (n) => n >= 1 ? `₹${n.toFixed(2)} Cr` : `₹${(n * 100).toFixed(0)} L`;
+const fmtL = (n) => `₹${n.toFixed(2)} L`;
+
+function App() {
+  const [screen, setScreen] = useState("login");
+  const [password, setPassword] = useState("");
+  const [pwError, setPwError] = useState(false);
+  const [activeTab, setActiveTab] = useState("intake");
+
+  const handleLogin = () => {
+    if (password === "safenest2024") { setScreen("dashboard"); setPwError(false); }
+    else setPwError(true);
+  };
+
+  if (screen === "login") return <LoginScreen password={password} setPassword={setPassword} onLogin={handleLogin} error={pwError} />;
+
+  return (
+    <div style={{ minHeight: "100vh", background: COLORS.charcoal, fontFamily: "'DM Sans', sans-serif", color: COLORS.text }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #111; } ::-webkit-scrollbar-thumb { background: ${COLORS.goldDim}; border-radius: 2px; }
+        input, select { outline: none; } button { cursor: pointer; }
+        .tab-btn { transition: all 0.2s; }
+        .tab-btn:hover { background: ${COLORS.surface3} !important; }
+        .card-hover { transition: border-color 0.2s, transform 0.2s; }
+        .card-hover:hover { border-color: ${COLORS.goldDim} !important; transform: translateY(-1px); }
+        .gold-btn { transition: all 0.2s; }
+        .gold-btn:hover { background: ${COLORS.goldLight} !important; color: #000 !important; }
+        .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ background: COLORS.surface, borderBottom: `1px solid ${COLORS.border}`, padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, color: COLORS.gold, letterSpacing: 1 }}>SafeNest</span>
+          <span style={{ fontSize: 11, color: COLORS.textMuted, background: COLORS.surface3, padding: "3px 10px", borderRadius: 20, border: `1px solid ${COLORS.border}` }}>ADVISOR PORTAL — CONFIDENTIAL</span>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          {[["intake", "Buyer Intake"], ["calculator", "True Cost Calculator"], ["opportunities", "Opportunity Table"]].map(([key, label]) => (
+            <button key={key} className="tab-btn" onClick={() => setActiveTab(key)} style={{ padding: "7px 18px", borderRadius: 6, border: "none", fontSize: 13, fontWeight: 500, background: activeTab === key ? COLORS.gold : COLORS.surface2, color: activeTab === key ? "#000" : COLORS.textMuted, fontFamily: "'DM Sans', sans-serif" }}>{label}</button>
+          ))}
+        </div>
+        <button onClick={() => setScreen("login")} style={{ fontSize: 12, color: COLORS.textMuted, background: "none", border: "none", fontFamily: "'DM Sans', sans-serif" }}>Sign Out</button>
+      </div>
+
+      <div style={{ padding: "28px 32px", maxWidth: 1400, margin: "0 auto" }}>
+        {activeTab === "intake" && <BuyerIntakeTab />}
+        {activeTab === "calculator" && <CalculatorTab />}
+        {activeTab === "opportunities" && <OpportunitiesTab />}
+      </div>
+    </div>
+  );
+}
+
+// ─── LOGIN ───────────────────────────────────────────────────────────────────
+function LoginScreen({ password, setPassword, onLogin, error }) {
+  return (
+    <div style={{ minHeight: "100vh", background: COLORS.charcoal, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; } .login-btn:hover { background: #E8C96A !important; }`}</style>
+      <div style={{ width: 380, textAlign: "center" }}>
+        <div style={{ marginBottom: 8, fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 600, color: COLORS.gold, letterSpacing: 2 }}>SafeNest</div>
+        <div style={{ fontSize: 12, color: COLORS.textMuted, marginBottom: 48, letterSpacing: 3, textTransform: "uppercase" }}>Advisor Intelligence Portal</div>
+        <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: 36 }}>
+          <div style={{ fontSize: 13, color: COLORS.textMuted, marginBottom: 20, textAlign: "left" }}>Advisor Password</div>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === "Enter" && onLogin()}
+            style={{ width: "100%", background: COLORS.surface2, border: `1px solid ${error ? COLORS.red : COLORS.border}`, borderRadius: 8, padding: "12px 16px", color: COLORS.text, fontSize: 15, marginBottom: 8, fontFamily: "'DM Sans', sans-serif" }} placeholder="Enter password" />
+          {error && <div style={{ color: COLORS.red, fontSize: 12, marginBottom: 12, textAlign: "left" }}>Incorrect password. Contact Ameer.</div>}
+          <button className="login-btn" onClick={onLogin} style={{ width: "100%", background: COLORS.gold, border: "none", borderRadius: 8, padding: "13px", color: "#000", fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans', sans-serif", marginTop: 8, cursor: "pointer", transition: "all 0.2s" }}>Access Dashboard</button>
+        </div>
+        <div style={{ marginTop: 24, fontSize: 11, color: "#444" }}>This portal is restricted to SafeNest advisors only.<br />Unauthorised access is prohibited.</div>
+        <div style={{ marginTop: 12, fontSize: 11, color: "#333" }}>Demo password: safenest2024</div>
+      </div>
+    </div>
+  );
+}
+
+// ─── BUYER INTAKE ─────────────────────────────────────────────────────────────
+function BuyerIntakeTab() {
+  const [form, setForm] = useState({ name: "", phone: "", budget: "", microMarket: "All", segment: "All", purpose: [], bedrooms: [], nonNeg: [], concerns: "" });
+  const [submitted, setSubmitted] = useState(false);
+  const [selected, setSelected] = useState([]);
+
+  const f = (k, v) => setForm(p => ({ ...p, [k]: v }));
+  const toggle = (k, v) => setForm(p => ({ ...p, [k]: p[k].includes(v) ? p[k].filter(x => x !== v) : [...p[k], v] }));
+
+  const NON_NEG_OPTIONS = ["RERA Registered", "OC Received", "Tier 1 Developer", "Bank Approved", "No RED Flags", "Possession < 12 months"];
+
+  const filtered = useMemo(() => {
+    if (!submitted) return [];
+    return PROJECTS.filter(p => {
+      const budgetMatch = !form.budget || (p.priceMin <= parseFloat(form.budget) && p.priceMax >= parseFloat(form.budget) * 0.7);
+      const mmMatch = form.microMarket === "All" || p.microMarket === form.microMarket;
+      const segMatch = form.segment === "All" || p.segment === form.segment;
+      const purposeMatch = form.purpose.length === 0 || form.purpose.some(pu => p.purpose.includes(pu));
+      const nnMatch = !form.nonNeg.includes("OC Received") || p.stage === "OC Stage";
+      const nnRera = !form.nonNeg.includes("RERA Registered") || true;
+      const nnTier1 = !form.nonNeg.includes("Tier 1 Developer") || p.developer === "Prestige Group";
+      const nnRed = !form.nonNeg.includes("No RED Flags") || p.flags.red === 0;
+      const nnPossession = !form.nonNeg.includes("Possession < 12 months") || p.handoverMonths <= 12;
+      return budgetMatch && mmMatch && segMatch && purposeMatch && nnMatch && nnRera && nnTier1 && nnRed && nnPossession;
+    }).sort((a, b) => b.score - a.score);
+  }, [submitted, form]);
+
+  const toggleSelect = (id) => setSelected(p => p.includes(id) ? p.filter(x => x !== id) : p.length < 3 ? [...p, id] : p);
+
+  return (
+    <div>
+      <SectionHeader title="Buyer Intake & Project Shortlist" subtitle="Enter buyer profile — matched projects surface instantly" />
+      <div style={{ display: "grid", gridTemplateColumns: submitted && filtered.length > 0 ? "380px 1fr" : "1fr", gap: 24 }}>
+        {/* FORM */}
+        <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: 28 }}>
+          <Label>Buyer Name</Label>
+          <Input value={form.name} onChange={v => f("name", v)} placeholder="e.g. Vikram Sharma" />
+          <Label>Phone</Label>
+          <Input value={form.phone} onChange={v => f("phone", v)} placeholder="10-digit mobile" />
+          <Label>Budget (₹ Cr)</Label>
+          <Input value={form.budget} onChange={v => f("budget", v)} placeholder="e.g. 1.5" type="number" />
+          <Label>Micro-Market</Label>
+          <Select value={form.microMarket} onChange={v => f("microMarket", v)} options={MICRO_MARKETS} />
+          <Label>Segment</Label>
+          <Select value={form.segment} onChange={v => f("segment", v)} options={SEGMENTS} />
+          <Label>Purpose</Label>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+            {PURPOSES.map(p => <ToggleChip key={p} label={p} active={form.purpose.includes(p)} onClick={() => toggle("purpose", p)} />)}
+          </div>
+          <Label>Non-Negotiables</Label>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+            {NON_NEG_OPTIONS.map(n => <ToggleChip key={n} label={n} active={form.nonNeg.includes(n)} onClick={() => toggle("nonNeg", n)} />)}
+          </div>
+          <Label>Buyer Concerns (Advisor Note)</Label>
+          <textarea value={form.concerns} onChange={e => f("concerns", e.target.value)} placeholder="e.g. Worried about delays. First-time buyer. Needs clear possession timeline." rows={3}
+            style={{ width: "100%", background: COLORS.surface2, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px 14px", color: COLORS.text, fontSize: 13, fontFamily: "'DM Sans', sans-serif", resize: "vertical", marginBottom: 20 }} />
+          <button className="gold-btn" onClick={() => { setSubmitted(true); setSelected([]); }} style={{ width: "100%", background: COLORS.gold, border: "none", borderRadius: 8, padding: "13px", color: "#000", fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans', sans-serif", cursor: "pointer" }}>
+            Find Matching Projects →
+          </button>
+          {submitted && <button onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", budget: "", microMarket: "All", segment: "All", purpose: [], bedrooms: [], nonNeg: [], concerns: "" }); setSelected([]); }} style={{ width: "100%", marginTop: 8, background: "none", border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px", color: COLORS.textMuted, fontSize: 13, fontFamily: "'DM Sans', sans-serif", cursor: "pointer" }}>Reset</button>}
+        </div>
+
+        {/* RESULTS */}
+        {submitted && (
+          <div>
+            {form.concerns && (
+              <div style={{ background: "#1A1500", border: `1px solid ${COLORS.goldDim}`, borderRadius: 10, padding: "12px 18px", marginBottom: 16, display: "flex", gap: 10, alignItems: "flex-start" }}>
+                <span style={{ color: COLORS.gold, fontSize: 16 }}>⚠</span>
+                <div><span style={{ color: COLORS.gold, fontSize: 12, fontWeight: 600 }}>BUYER CONCERN ON FILE — </span><span style={{ fontSize: 13, color: "#CCC" }}>{form.concerns}</span></div>
+              </div>
+            )}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div style={{ fontSize: 13, color: COLORS.textMuted }}>{filtered.length} projects matched · Select up to 3 for comparison</div>
+              {selected.length > 0 && <div style={{ fontSize: 13, color: COLORS.gold }}>{selected.length} selected</div>}
+            </div>
+            {filtered.length === 0 ? (
+              <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: 48, textAlign: "center", color: COLORS.textMuted }}>No projects match these criteria.<br />Try widening budget or micro-market.</div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {filtered.map(p => <ProjectCard key={p.id} project={p} selected={selected.includes(p.id)} onSelect={() => toggleSelect(p.id)} />)}
+              </div>
+            )}
+            {selected.length >= 2 && (
+              <div style={{ marginTop: 20, background: `linear-gradient(135deg, #1A1500, #111)`, border: `1px solid ${COLORS.gold}`, borderRadius: 12, padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div>
+                  <div style={{ fontSize: 13, color: COLORS.gold, fontWeight: 600, marginBottom: 4 }}>Shortlist ready — {selected.length} projects selected</div>
+                  <div style={{ fontSize: 12, color: COLORS.textMuted }}>{filtered.filter(p => selected.includes(p.id)).map(p => p.name).join(" · ")}</div>
+                </div>
+                <div style={{ fontSize: 12, color: COLORS.textMuted }}>Use True Cost Calculator tab →</div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ProjectCard({ project: p, selected, onSelect }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="card-hover" style={{ background: COLORS.surface, border: `1px solid ${selected ? COLORS.gold : COLORS.border}`, borderRadius: 12, padding: "18px 22px", cursor: "pointer" }} onClick={onSelect}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+            <div style={{ width: 20, height: 20, borderRadius: 4, border: `2px solid ${selected ? COLORS.gold : COLORS.border}`, background: selected ? COLORS.gold : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {selected && <span style={{ color: "#000", fontSize: 12, fontWeight: 700 }}>✓</span>}
+            </div>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontWeight: 600, color: COLORS.text }}>{p.name}</span>
+            <span className="pill" style={{ background: `${ratingColor(p.rating)}22`, color: ratingColor(p.rating), border: `1px solid ${ratingColor(p.rating)}44` }}>{p.rating}</span>
+            {p.flags.red > 0 && <span className="pill" style={{ background: "#C0392B22", color: COLORS.red, border: `1px solid ${COLORS.red}44` }}>🔴 {p.flags.red} RED</span>}
+            {p.flags.amber > 0 && <span className="pill" style={{ background: "#E67E2222", color: COLORS.amber, border: `1px solid ${COLORS.amber}44` }}>🟡 {p.flags.amber} AMBER</span>}
+          </div>
+          <div style={{ display: "flex", gap: 16, fontSize: 12, color: COLORS.textMuted, marginLeft: 30 }}>
+            <span>{p.developer}</span><span>·</span><span>{p.microMarket}</span><span>·</span><span>{p.segment}</span><span>·</span>
+            <span style={{ color: stageColor(p.stage) }}>{p.stage}</span>
+          </div>
+        </div>
+        <div style={{ textAlign: "right", flexShrink: 0 }}>
+          <div style={{ fontSize: 24, fontWeight: 700, color: COLORS.gold, fontFamily: "'Cormorant Garamond', serif" }}>{p.score}</div>
+          <div style={{ fontSize: 10, color: COLORS.textMuted }}>SafeNest Score</div>
+          <div style={{ fontSize: 11, color: verdictColor(p.verdict), marginTop: 2 }}>{p.verdict}</div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 24, marginTop: 12, marginLeft: 30 }}>
+        <Metric label="Price Band" value={`${fmt(p.priceMin)} – ${fmt(p.priceMax)}`} />
+        <Metric label="PSF" value={`₹${p.psf.toLocaleString()}`} />
+        <Metric label="Handover" value={p.handoverMonths <= 3 ? "Ready" : `${p.handoverMonths}M`} />
+        <Metric label="Rental/sft" value={p.rentalYield > 0 ? `₹${p.rentalYield}/mo` : "N/A (Plot)"} />
+        <Metric label="GST" value={p.gstApplicable ? "5% Applicable" : "Nil (OC)"} />
+      </div>
+      <button onClick={e => { e.stopPropagation(); setExpanded(!expanded); }} style={{ marginLeft: 30, marginTop: 10, background: "none", border: "none", color: COLORS.goldDim, fontSize: 12, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}>
+        {expanded ? "▲ Hide details" : "▼ Advisor intelligence"}
+      </button>
+      {expanded && (
+        <div style={{ marginLeft: 30, marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div>
+            <div style={{ fontSize: 11, color: COLORS.gold, fontWeight: 600, marginBottom: 6 }}>STRENGTHS (BUYER-VISIBLE)</div>
+            {p.highlights.map((h, i) => <div key={i} style={{ fontSize: 12, color: "#AAA", marginBottom: 4 }}>✓ {h}</div>)}
+          </div>
+          <div>
+            <div style={{ fontSize: 11, color: COLORS.amber, fontWeight: 600, marginBottom: 6 }}>CAUTION (ADVISOR ONLY)</div>
+            <div style={{ fontSize: 12, color: "#AAA" }}>⚠ {p.caution}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── CALCULATOR ───────────────────────────────────────────────────────────────
+function CalculatorTab() {
+  const emptyProj = {
+    name: "", sizeSft: "", psf: "", handoverMonths: "", gst: false,
+    loanPct: 80, interestRate: 8.5, paymentPlan: "Construction-linked",
+    rentalYield: "", rentalGrowth: 5,
+    subventionMonths: "", disbursementAtSubventionEnd: 85,
+  };
+  const [projects, setProjects] = useState([{ ...emptyProj, id: "A" }, { ...emptyProj, id: "B" }]);
+  const [results, setResults] = useState(null);
+
+  const update = (id, key, val) => setProjects(ps => ps.map(p => p.id === id ? { ...p, [key]: val } : p));
+
+  const calculate = () => {
+    const calcs = projects.map(p => {
+      const size = parseFloat(p.sizeSft) || 0;
+      const psf = parseFloat(p.psf) || 0;
+      const months = parseFloat(p.handoverMonths) || 0;
+      const gstRate = p.gst ? 0.05 : 0;
+      const loanPct = parseFloat(p.loanPct) / 100;
+      const rate = parseFloat(p.interestRate) / 100;
+      const rental = parseFloat(p.rentalYield) || 0;
+      const growth = parseFloat(p.rentalGrowth) / 100;
+
+      const baseCost = (size * psf) / 1e7;
+      const gstAmount = baseCost * gstRate;
+      const totalCost = baseCost + gstAmount;
+      const loanAmt = totalCost * loanPct;
+
+      // Pre-EMI interest calculation — three plan types
+      let preEmiInterest = 0;
+      let builderPaysInterest = 0;
+      let buyerExposureMonths = 0;
+      let subventionNote = "";
+
+      if (p.paymentPlan === "Subvention") {
+        const subMonths = parseFloat(p.subventionMonths) || 0;
+        const disbPct = parseFloat(p.disbursementAtSubventionEnd) / 100;
+        buyerExposureMonths = Math.max(0, months - subMonths);
+
+        // Builder pays interest on avg 50% of loan during subvention period
+        builderPaysInterest = loanAmt * rate * 0.50 * (subMonths / 12);
+
+        // Buyer pays interest on disbPct% of loan for remaining exposure period
+        preEmiInterest = loanAmt * disbPct * rate * (buyerExposureMonths / 12);
+
+        subventionNote = subMonths > 0
+          ? `Builder covers ${subMonths}M · You pay ${buyerExposureMonths}M on ${p.disbursementAtSubventionEnd}% disbursed loan`
+          : "Enter subvention months above";
+      } else {
+        const avgDisbursed = p.paymentPlan === "Construction-linked" ? 0.55 : 0.65;
+        preEmiInterest = loanAmt * rate * avgDisbursed * (months / 12);
+        buyerExposureMonths = months;
+      }
+
+      // Rental income over 4 years
+      const totalMonths = 48;
+      let totalRental = 0;
+      if (rental > 0) {
+        let currentRental = (rental * size) / 1e5;
+        let yearStart = months;
+        for (let yr = 0; yr < 4; yr++) {
+          const yearMonthsAvail = Math.min(12, Math.max(0, totalMonths - yearStart));
+          totalRental += currentRental * yearMonthsAvail;
+          currentRental *= (1 + growth);
+          yearStart += 12;
+          if (yearStart >= totalMonths) break;
+        }
+      }
+
+      const effectiveCost = (totalCost * 100) + (preEmiInterest * 100) - totalRental;
+      return {
+        name: p.name || `Project ${p.id}`,
+        baseCost, gstAmount, totalCost,
+        preEmiInterest, builderPaysInterest,
+        totalRental, effectiveCost,
+        months, paymentPlan: p.paymentPlan,
+        subventionMonths: parseFloat(p.subventionMonths) || 0,
+        buyerExposureMonths, subventionNote,
+        disbursementAtSubventionEnd: p.disbursementAtSubventionEnd,
+      };
+    });
+    setResults(calcs);
+  };
+
+  const winner = results ? (results[0].effectiveCost < results[1].effectiveCost ? 0 : 1) : null;
+  const saving = results ? Math.abs(results[0].effectiveCost - results[1].effectiveCost) : 0;
+
+  return (
+    <div>
+      <SectionHeader title="True Cost Calculator" subtitle="Compare real 4-year economic cost — sticker price vs actual cost of ownership" />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+        {projects.map(p => (
+          <div key={p.id} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 12, padding: 24 }}>
+            <div style={{ fontSize: 13, color: COLORS.gold, fontWeight: 600, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ background: COLORS.gold, color: "#000", borderRadius: 4, width: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>{p.id}</span>
+              PROJECT {p.id}
+            </div>
+            <Label>Project Name</Label>
+            <Input value={p.name} onChange={v => update(p.id, "name", v)} placeholder="e.g. Lansum El Palacio" />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div><Label>Size (sft)</Label><Input value={p.sizeSft} onChange={v => update(p.id, "sizeSft", v)} placeholder="2800" type="number" /></div>
+              <div><Label>PSF (₹)</Label><Input value={p.psf} onChange={v => update(p.id, "psf", v)} placeholder="8200" type="number" /></div>
+              <div><Label>Handover (months)</Label><Input value={p.handoverMonths} onChange={v => update(p.id, "handoverMonths", v)} placeholder="40" type="number" /></div>
+              <div><Label>Loan %</Label><Input value={p.loanPct} onChange={v => update(p.id, "loanPct", v)} placeholder="80" type="number" /></div>
+              <div><Label>Interest Rate %</Label><Input value={p.interestRate} onChange={v => update(p.id, "interestRate", v)} placeholder="8.5" type="number" /></div>
+              <div><Label>Rental (₹/sft/mo)</Label><Input value={p.rentalYield} onChange={v => update(p.id, "rentalYield", v)} placeholder="19" type="number" /></div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div>
+                <Label>Payment Plan</Label>
+                <Select value={p.paymentPlan} onChange={v => update(p.id, "paymentPlan", v)} options={["Construction-linked", "Time-linked", "Subvention"]} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 18 }}>
+                <input type="checkbox" checked={p.gst} onChange={e => update(p.id, "gst", e.target.checked)} style={{ width: 16, height: 16, accentColor: COLORS.gold }} id={`gst-${p.id}`} />
+                <label htmlFor={`gst-${p.id}`} style={{ fontSize: 13, color: COLORS.textMuted, cursor: "pointer" }}>GST Applicable (5%)</label>
+              </div>
+            </div>
+
+            {/* SUBVENTION FIELDS — slide in when selected */}
+            {p.paymentPlan === "Subvention" && (
+              <div style={{ background: "#0F1A0F", border: `1px solid #2A5A2A`, borderRadius: 10, padding: 16, marginTop: 4, marginBottom: 8 }}>
+                <div style={{ fontSize: 11, color: "#5AFF8A", fontWeight: 600, marginBottom: 12, letterSpacing: 1 }}>SUBVENTION SCHEME DETAILS</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <div>
+                    <Label>Builder Covers Interest For</Label>
+                    <Input value={p.subventionMonths} onChange={v => update(p.id, "subventionMonths", v)} placeholder="24" type="number" />
+                    <div style={{ fontSize: 11, color: "#555", marginTop: -12, marginBottom: 8 }}>months from booking</div>
+                  </div>
+                  <div>
+                    <Label>Disbursement at Subvention End %</Label>
+                    <Input value={p.disbursementAtSubventionEnd} onChange={v => update(p.id, "disbursementAtSubventionEnd", v)} placeholder="85" type="number" />
+                    <div style={{ fontSize: 11, color: "#555", marginTop: -12, marginBottom: 8 }}>% of loan already drawn</div>
+                  </div>
+                </div>
+                {p.subventionMonths && p.handoverMonths && (
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                    <div style={{ background: "#0A2A0A", borderRadius: 8, padding: "10px 14px", textAlign: "center" }}>
+                      <div style={{ fontSize: 10, color: "#5AFF8A", marginBottom: 4 }}>BUILDER PAYS</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: "#5AFF8A" }}>{p.subventionMonths}M</div>
+                      <div style={{ fontSize: 10, color: "#555" }}>Zero EMI for buyer</div>
+                    </div>
+                    <div style={{ background: "#2A1A0A", borderRadius: 8, padding: "10px 14px", textAlign: "center" }}>
+                      <div style={{ fontSize: 10, color: COLORS.amber, marginBottom: 4 }}>YOU PAY</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.amber }}>{Math.max(0, parseFloat(p.handoverMonths) - parseFloat(p.subventionMonths))}M</div>
+                      <div style={{ fontSize: 10, color: "#555" }}>on {p.disbursementAtSubventionEnd}% loan disbursed</div>
+                    </div>
+                  </div>
+                )}
+                <div style={{ marginTop: 12, fontSize: 11, color: "#666", lineHeight: 1.5 }}>
+                  ⚠ Advisor note: Subvention units are typically priced 8–12% higher. Run the full calculation to check if the "free EMI" period actually saves money vs a lower-priced construction-linked unit.
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <button className="gold-btn" onClick={calculate} style={{ width: "100%", background: COLORS.gold, border: "none", borderRadius: 10, padding: "15px", color: "#000", fontSize: 15, fontWeight: 700, fontFamily: "'DM Sans', sans-serif", cursor: "pointer", marginBottom: 24 }}>
+        Calculate True 4-Year Cost →
+      </button>
+
+      {results && (
+        <div>
+          {/* Headline */}
+          <div style={{ background: `linear-gradient(135deg, #1A1500, #0F0F0F)`, border: `2px solid ${COLORS.gold}`, borderRadius: 14, padding: "24px 32px", textAlign: "center", marginBottom: 24 }}>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 14, color: COLORS.textMuted, marginBottom: 8, letterSpacing: 2, textTransform: "uppercase" }}>True Cost Verdict</div>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 600, color: COLORS.gold }}>
+              {results[winner].name} costs ₹{saving.toFixed(1)}L less over 4 years
+            </div>
+            <div style={{ fontSize: 13, color: COLORS.textMuted, marginTop: 8 }}>
+              After accounting for pre-EMI interest, GST differential, and rental opportunity cost
+            </div>
+          </div>
+
+          {/* Breakdown */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            {results.map((r, i) => (
+              <div key={i} style={{ background: COLORS.surface, border: `2px solid ${i === winner ? COLORS.gold : COLORS.border}`, borderRadius: 12, padding: 24, position: "relative" }}>
+                {i === winner && <div style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: COLORS.gold, color: "#000", fontSize: 11, fontWeight: 700, padding: "3px 14px", borderRadius: 20 }}>LOWER TRUE COST</div>}
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, marginBottom: 4, color: COLORS.text }}>{r.name}</div>
+                <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 20 }}>{r.paymentPlan}{r.paymentPlan === "Subvention" ? ` · ${r.subventionMonths}M builder-covered` : ""}</div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <CalcRow label="Base Acquisition Cost" value={`₹${(r.baseCost * 100).toFixed(2)}L`} />
+                  <CalcRow label="GST (if applicable)" value={r.gstAmount > 0 ? `+ ₹${(r.gstAmount * 100).toFixed(2)}L` : "Nil"} highlight={r.gstAmount > 0} />
+                  <CalcRow label="Total Acquisition" value={`₹${(r.totalCost * 100).toFixed(2)}L`} bold />
+
+                  <div style={{ borderTop: `1px dashed ${COLORS.border}`, margin: "4px 0" }} />
+
+                  {r.paymentPlan === "Subvention" && r.subventionMonths > 0 ? (
+                    <>
+                      <CalcRow
+                        label={`Builder pays interest (${r.subventionMonths}M)`}
+                        value={`₹${(r.builderPaysInterest * 100).toFixed(2)}L absorbed`}
+                        positive
+                      />
+                      <CalcRow
+                        label={`Your pre-EMI (${r.buyerExposureMonths}M on ${r.disbursementAtSubventionEnd}% loan)`}
+                        value={r.preEmiInterest > 0 ? `+ ₹${(r.preEmiInterest * 100).toFixed(2)}L` : "Nil"}
+                        highlight={r.preEmiInterest > 0}
+                      />
+                      <div style={{ background: "#1A1200", border: `1px solid ${COLORS.goldDim}`, borderRadius: 8, padding: "10px 14px" }}>
+                        <div style={{ fontSize: 11, color: COLORS.gold, marginBottom: 4 }}>SUBVENTION REALITY CHECK</div>
+                        <div style={{ fontSize: 11, color: "#AAA", lineHeight: 1.5 }}>
+                          Builder absorbed ₹{(r.builderPaysInterest * 100).toFixed(1)}L of interest but typically recovers this via higher PSF pricing. Verify PSF vs comparable construction-linked units.
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <CalcRow
+                      label={`Pre-EMI Interest (${r.months}M · ${r.paymentPlan})`}
+                      value={`+ ₹${(r.preEmiInterest * 100).toFixed(2)}L`}
+                      highlight={r.preEmiInterest > 0}
+                    />
+                  )}
+
+                  <CalcRow
+                    label="Rental Income (4-year, 5% growth)"
+                    value={r.totalRental > 0 ? `− ₹${r.totalRental.toFixed(2)}L` : "− Nil"}
+                    positive={r.totalRental > 0}
+                  />
+
+                  <div style={{ borderTop: `1px solid ${COLORS.border}`, margin: "4px 0" }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 13, color: COLORS.gold, fontWeight: 600 }}>Net True Cost</span>
+                    <span style={{ fontSize: 22, fontWeight: 700, color: i === winner ? COLORS.green : COLORS.text, fontFamily: "'Cormorant Garamond', serif" }}>₹{r.effectiveCost.toFixed(2)}L</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 16, fontSize: 11, color: "#444", textAlign: "center" }}>
+            Rental growth at 5% p.a. · Pre-EMI on stage-wise disbursement curve · Subvention interest computed on actual buyer exposure window · Indicative only — validate with bank.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CalcRow({ label, value, highlight, positive, bold }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <span style={{ fontSize: 12, color: COLORS.textMuted }}>{label}</span>
+      <span style={{ fontSize: 13, fontWeight: bold ? 700 : 500, color: positive ? COLORS.green : highlight ? COLORS.amber : COLORS.text }}>{value}</span>
+    </div>
+  );
+}
+
+// ─── OPPORTUNITIES ─────────────────────────────────────────────────────────────
+function OpportunitiesTab() {
+  const [filter, setFilter] = useState("All");
+  const [expanded, setExpanded] = useState(null);
+
+  const today = new Date();
+  const daysLeft = (exp) => Math.ceil((new Date(exp) - today) / (1000 * 60 * 60 * 24));
+
+  const filtered = filter === "All" ? OPPORTUNITIES : OPPORTUNITIES.filter(o => o.type === filter);
+
+  return (
+    <div>
+      <SectionHeader title="Advisor Opportunity Table" subtitle="Builder leftovers · Landlord share units · Curated by Ameer — never shared with buyers" />
+      <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+        {["All", "Builder Leftover", "Landlord Share"].map(f => (
+          <button key={f} className="tab-btn" onClick={() => setFilter(f)} style={{ padding: "8px 18px", borderRadius: 8, border: `1px solid ${filter === f ? COLORS.gold : COLORS.border}`, background: filter === f ? `${COLORS.gold}18` : "none", color: filter === f ? COLORS.gold : COLORS.textMuted, fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>{f}</button>
+        ))}
+        <div style={{ marginLeft: "auto", fontSize: 12, color: COLORS.textMuted, display: "flex", alignItems: "center" }}>🔒 Advisor eyes only — not visible to buyers</div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {filtered.map(o => {
+          const dl = daysLeft(o.expiry);
+          const isExpiring = dl <= 14;
+          return (
+            <div key={o.id} className="card-hover" style={{ background: COLORS.surface, border: `1px solid ${isExpiring ? COLORS.amber : COLORS.border}`, borderRadius: 12, padding: 24 }}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                    <span className="pill" style={{ background: o.type === "Builder Leftover" ? "#1A3A5C" : "#1A3A1A", color: o.type === "Builder Leftover" ? "#5AAEFF" : "#5AFF8A", border: `1px solid ${o.type === "Builder Leftover" ? "#5AAEFF44" : "#5AFF8A44"}` }}>{o.type}</span>
+                    <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600 }}>{o.title}</span>
+                    {isExpiring && <span className="pill" style={{ background: "#E67E2222", color: COLORS.amber, border: `1px solid ${COLORS.amber}44` }}>⚡ Expiring in {dl}d</span>}
+                  </div>
+                  <div style={{ fontSize: 12, color: COLORS.textMuted, marginBottom: 12 }}>{o.project} · {o.microMarket} · {o.units} unit{o.units > 1 ? "s" : ""} available</div>
+                  <div style={{ fontSize: 13, color: "#BBB", lineHeight: 1.6 }}>{o.description}</div>
+                </div>
+                <div style={{ textAlign: "right", flexShrink: 0, minWidth: 160 }}>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: COLORS.green, fontFamily: "'Cormorant Garamond', serif" }}>−{o.gap}%</div>
+                  <div style={{ fontSize: 11, color: COLORS.textMuted }}>vs current market</div>
+                  <div style={{ marginTop: 8 }}>
+                    <div style={{ fontSize: 12, color: COLORS.textMuted }}>Listed PSF</div>
+                    <div style={{ fontSize: 16, fontWeight: 600, color: COLORS.text }}>₹{o.psf.toLocaleString()}</div>
+                  </div>
+                  <div style={{ marginTop: 4 }}>
+                    <div style={{ fontSize: 12, color: COLORS.textMuted }}>Market PSF</div>
+                    <div style={{ fontSize: 14, color: COLORS.textMuted, textDecoration: "line-through" }}>₹{o.marketPsf.toLocaleString()}</div>
+                  </div>
+                  <div style={{ marginTop: 8, fontSize: 11, color: isExpiring ? COLORS.amber : COLORS.textMuted }}>Offer expires: {new Date(o.expiry).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</div>
+                  <div style={{ marginTop: 4, fontSize: 11, color: "#444" }}>{o.monthsSinceRevision}M since last price revision</div>
+                </div>
+              </div>
+
+              <button onClick={() => setExpanded(expanded === o.id ? null : o.id)} style={{ marginTop: 12, background: "none", border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "7px 16px", color: COLORS.gold, fontSize: 12, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}>
+                {expanded === o.id ? "▲ Hide pitch intelligence" : "▼ View pitch intelligence"}
+              </button>
+
+              {expanded === o.id && (
+                <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <div style={{ background: COLORS.surface2, borderRadius: 10, padding: 18, border: `1px solid ${COLORS.border}` }}>
+                    <div style={{ fontSize: 11, color: COLORS.gold, fontWeight: 600, marginBottom: 10, letterSpacing: 1 }}>WHY AVAIL THIS OFFER</div>
+                    <div style={{ fontSize: 13, color: "#AAA", lineHeight: 1.7 }}>{o.whyAvail}</div>
+                  </div>
+                  <div style={{ background: COLORS.surface2, borderRadius: 10, padding: 18, border: `1px solid ${COLORS.border}` }}>
+                    <div style={{ fontSize: 11, color: COLORS.gold, fontWeight: 600, marginBottom: 10, letterSpacing: 1 }}>CONTACT & ACCESS</div>
+                    <div style={{ fontSize: 13, color: "#AAA", lineHeight: 1.7 }}>{o.contact}</div>
+                    <div style={{ marginTop: 16 }}>
+                      <button className="gold-btn" style={{ background: COLORS.gold, border: "none", borderRadius: 6, padding: "9px 18px", color: "#000", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}>
+                        Mark as Presented to Buyer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ marginTop: 32, background: COLORS.surface2, border: `1px dashed ${COLORS.border}`, borderRadius: 12, padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <div style={{ fontSize: 13, color: COLORS.textMuted, marginBottom: 4 }}>Add a new opportunity</div>
+          <div style={{ fontSize: 12, color: "#444" }}>All opportunities are curated by Ameer only. Airtable integration in Phase 2.</div>
+        </div>
+        <button style={{ background: "none", border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px 20px", color: COLORS.textMuted, fontSize: 13, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}>+ New Opportunity (Coming Phase 2)</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── SHARED UI COMPONENTS ────────────────────────────────────────────────────
+function SectionHeader({ title, subtitle }) {
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 30, fontWeight: 600, color: COLORS.text, marginBottom: 6 }}>{title}</h1>
+      <p style={{ fontSize: 13, color: COLORS.textMuted }}>{subtitle}</p>
+      <div style={{ height: 2, background: `linear-gradient(90deg, ${COLORS.gold}, transparent)`, marginTop: 14, width: 120 }} />
+    </div>
+  );
+}
+
+function Label({ children }) {
+  return <div style={{ fontSize: 11, color: COLORS.textMuted, fontWeight: 600, marginBottom: 6, letterSpacing: 0.5, textTransform: "uppercase" }}>{children}</div>;
+}
+
+function Input({ value, onChange, placeholder, type = "text" }) {
+  return (
+    <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+      style={{ width: "100%", background: COLORS.surface2, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px 14px", color: COLORS.text, fontSize: 13, marginBottom: 16, fontFamily: "'DM Sans', sans-serif", display: "block" }} />
+  );
+}
+
+function Select({ value, onChange, options }) {
+  return (
+    <select value={value} onChange={e => onChange(e.target.value)}
+      style={{ width: "100%", background: COLORS.surface2, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px 14px", color: COLORS.text, fontSize: 13, marginBottom: 16, fontFamily: "'DM Sans', sans-serif" }}>
+      {options.map(o => <option key={o} value={o}>{o}</option>)}
+    </select>
+  );
+}
+
+function ToggleChip({ label, active, onClick }) {
+  return (
+    <button onClick={onClick} style={{ padding: "5px 13px", borderRadius: 20, border: `1px solid ${active ? COLORS.gold : COLORS.border}`, background: active ? `${COLORS.gold}20` : "none", color: active ? COLORS.gold : COLORS.textMuted, fontSize: 12, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.15s" }}>
+      {label}
+    </button>
+  );
+}
+
+function Metric({ label, value }) {
+  return (
+    <div>
+      <div style={{ fontSize: 10, color: COLORS.textMuted }}>{label}</div>
+      <div style={{ fontSize: 12, color: COLORS.text, fontWeight: 500 }}>{value}</div>
+    </div>
+  );
+}
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

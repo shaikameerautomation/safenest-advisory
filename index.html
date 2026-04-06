@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeNest Advisory — Intelligence Suite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0A0A0A; color: #E8E8E8; font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    .hero {
+      background: linear-gradient(160deg, #0F0F0F 0%, #141414 50%, #0A0A0A 100%);
+      border-bottom: 1px solid #1E1E1E;
+      padding: 72px 48px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 1px;
+      background: linear-gradient(90deg, transparent, #C9A84C44, transparent);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: #1A1500; border: 1px solid #3A2E00;
+      color: #C9A84C; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+    }
+    .hero-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 64px; font-weight: 600;
+      color: #C9A84C; letter-spacing: 3px;
+      line-height: 1; margin-bottom: 16px;
+    }
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; font-style: italic;
+      color: #888; margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 13px; color: #555; max-width: 520px; margin: 0 auto;
+      line-height: 1.7;
+    }
+    .hero-divider {
+      width: 80px; height: 1px;
+      background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+      margin: 32px auto 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 14px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color 0.25s, transform 0.25s, background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-3px); background: #181818; }
+    .card:hover::after { opacity: 1; }
+
+    .card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .card-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 600; margin-bottom: 10px;
+      color: #E8E8E8;
+    }
+    .card-desc {
+      font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;
+    }
+    .card-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;
+    }
+    .tag {
+      font-size: 10px; padding: 3px 10px; border-radius: 20px;
+      font-weight: 500;
+    }
+    .card-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600;
+      padding: 10px 20px; border-radius: 8px;
+      transition: all 0.2s; text-decoration: none;
+    }
+
+    /* Advisor card */
+    .card-advisor { --accent: #C9A84C; }
+    .card-advisor .card-icon { background: #1A1500; }
+    .card-advisor .card-label { color: #C9A84C; }
+    .card-advisor .tag { background: #1A150044; color: #C9A84C; border: 1px solid #C9A84C33; }
+    .card-advisor .card-cta { background: #C9A84C; color: #000; }
+    .card-advisor .card-cta:hover { background: #E8C96A; }
+
+    /* Comparison card */
+    .card-compare { --accent: #5AAEFF; }
+    .card-compare .card-icon { background: #0A1A2E; }
+    .card-compare .card-label { color: #5AAEFF; }
+    .card-compare .tag { background: #0A1A2E44; color: #5AAEFF; border: 1px solid #5AAEFF33; }
+    .card-compare .card-cta { background: #5AAEFF; color: #000; }
+    .card-compare .card-cta:hover { background: #7AC4FF; }
+
+    /* Research card */
+    .card-research { --accent: #5AFF8A; }
+    .card-research .card-icon { background: #0A2A0A; }
+    .card-research .card-label { color: #5AFF8A; }
+    .card-research .tag { background: #0A2A0A44; color: #5AFF8A; border: 1px solid #5AFF8A33; }
+    .card-research .card-cta { background: #5AFF8A; color: #000; }
+    .card-research .card-cta:hover { background: #7AFFAA; }
+
+    /* Data grid card */
+    .card-data { --accent: #FF8A5A; }
+    .card-data .card-icon { background: #2A1500; }
+    .card-data .card-label { color: #FF8A5A; }
+    .card-data .tag { background: #2A150044; color: #FF8A5A; border: 1px solid #FF8A5A33; }
+    .card-data .card-cta { background: #FF8A5A; color: #000; }
+    .card-data .card-cta:hover { background: #FFAA7A; }
+
+    .footer {
+      border-top: 1px solid #1A1A1A;
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; color: #C9A84C; letter-spacing: 1px;
+    }
+    .footer-text { font-size: 11px; color: #333; }
+    .footer-reg { font-size: 11px; color: #444; text-align: right; }
+
+    .confidential-banner {
+      background: #0F0A00; border-bottom: 1px solid #2A2000;
+      padding: 10px 48px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 11px; color: #555; letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 48px 24px 40px; }
+      .hero-logo { font-size: 42px; }
+      .grid { padding: 24px; gap: 16px; }
+      .footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+      .confidential-banner { padding: 10px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confidential-banner">
+    <span style="color:#C9A84C">◈</span>
+    SAFENEST ADVISORY · PROPRIETARY INTELLIGENCE SUITE · FOR AUTHORISED RECIPIENTS ONLY
+    <span style="color:#C9A84C">◈</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge">Hyderabad · West Corridor · RERA-Registered</div>
+    <div class="hero-logo">SafeNest</div>
+    <div class="hero-tagline">The Moody's of Real Estate</div>
+    <p class="hero-sub">
+      India's first buyer-side real estate intelligence platform. Proprietary scoring. Radical transparency. Zero builder bias.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Advisor Dashboard -->
+    <a href="advisor-dashboard.html" class="card card-advisor" target="_blank">
+      <div class="card-icon">⚡</div>
+      <div class="card-label">Advisor Intelligence</div>
+      <div class="card-title">Advisor Command Centre</div>
+      <p class="card-desc">
+        Live buyer profiling, project shortlisting, true cost calculator with subvention logic, and curated opportunity table. Password protected — advisor use only.
+      </p>
+      <div class="card-tags">
+        <span class="tag">Buyer Intake</span>
+        <span class="tag">Project Matching</span>
+        <span class="tag">True Cost Calculator</span>
+        <span class="tag">Opportunity Table</span>
+      </div>
+      <span class="card-cta">Open Dashboard →</span>
+    </a>
+
+    <!-- Comparison Report -->
+    <a href="SafeNest_ComparisonReport_FINAL.html" class="card card-compare" target="_blank">
+      <div class="card-icon">⚖</div>
+      <div class="card-label">Buyer Deliverable · D1</div>
+      <div class="card-title">Project Comparison Report</div>
+      <p class="card-desc">
+        Side-by-side comparison of shortlisted projects with SafeNest scores, verdict labels, and plain-language summaries. Shared via WhatsApp post-meeting.
+      </p>
+      <div class="card-tags">
+        <span class="tag">SafeNest Score</span>
+        <span class="tag">Verdict Labels</span>
+        <span class="tag">Side-by-Side</span>
+        <span class="tag">WhatsApp Ready</span>
+      </div>
+      <span class="card-cta">View Report →</span>
+    </a>
+
+    <!-- Deep Research Report -->
+    <a href="SafeNest_DeepResearch_FINAL.html" class="card card-research" target="_blank">
+      <div class="card-icon">🔍</div>
+      <div class="card-label">Buyer Deliverable · D3</div>
+      <div class="card-title">Deep Research Report</div>
+      <p class="card-desc">
+        Full project due diligence — legal status, regulatory checklist, scoring breakdown, flags, and advisor recommendation. Purchasable at ₹4,999 via Razorpay.
+      </p>
+      <div class="card-tags">
+        <span class="tag">Due Diligence</span>
+        <span class="tag">RERA Verified</span>
+        <span class="tag">Flag Analysis</span>
+        <span class="tag">₹4,999 Report</span>
+      </div>
+      <span class="card-cta">View Report →</span>
+    </a>
+
+    <!-- Data Input Grid -->
+    <a href="SafeNest_DataInput_Grid_v2_4.docx" class="card card-data" download>
+      <div class="card-icon">📊</div>
+      <div class="card-label">Internal · Operations</div>
+      <div class="card-title">Data Input Grid v2.4</div>
+      <p class="card-desc">
+        Master project data collection template. 80+ fields across 6 groups covering scoring parameters, legal status, construction, location, product, and financial intelligence.
+      </p>
+      <div class="card-tags">
+        <span class="tag">80+ Fields</span>
+        <span class="tag">6 Scoring Groups</span>
+        <span class="tag">Airtable Ready</span>
+        <span class="tag">v2.4 Schema</span>
+      </div>
+      <span class="card-cta">Download Grid ↓</span>
+    </a>
+
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 48px;">
+    <div style="background:#111;border:1px solid #1E1E1E;border-radius:12px;padding:24px 28px;display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:10px;color:#C9A84C;font-weight:600;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;">Scoring Methodology</div>
+        <div style="font-size:12px;color:#555;line-height:1.7;">
+          Legal 18% · Developer 15% · Construction 18% · Location 15% · Product 12% · Escrow 10% · JV 10% · Demand 2%
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:10px;color:#C9A84C;font-weight:600;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;">Coverage</div>
+        <div style="font-size:12px;color:#555;line-height:1.7;">
+          Kokapet · Tellapur · Kollur · Narsingi · Mokila · Patancheru · Osman Nagar · Gopanpally
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:10px;color:#C9A84C;font-weight:600;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;">Legal Disclaimer</div>
+        <div style="font-size:12px;color:#555;line-height:1.7;">
+          SafeNest scores are advisory in nature. Title search and EC verification remain the buyer's responsibility through independent legal counsel.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #141414;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;flex-wrap:wrap;gap:12px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#C9A84C;letter-spacing:1px;">SafeNest Advisory</div>
+    <div style="font-size:11px;color:#333;">RERA Registered · Hyderabad · Buyer-Side Only</div>
+    <div style="font-size:11px;color:#333;text-align:right;">© 2026 SafeNest Advisory · Proprietary & Confidential</div>
+  </div>
+
+</body>
+</html>
