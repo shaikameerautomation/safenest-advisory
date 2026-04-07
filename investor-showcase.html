@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeNest Advisory — The Moody's of Real Estate</title>
+<meta name="description" content="India's first independent buyer-side rating agency for residential real estate. Proprietary scoring, AI-powered advisory, structural independence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0A0E14;
+  --surface: #12171F;
+  --card: #1A1F2A;
+  --card-hover: #1F2530;
+  --border: #252B38;
+  --border-light: #2E3542;
+  --gold: #C9A84C;
+  --gold-bright: #E5C875;
+  --gold-muted: rgba(201, 168, 76, 0.12);
+  --gold-border: rgba(201, 168, 76, 0.25);
+  --cream: #FAF6EE;
+  --text: #E8E4DC;
+  --muted: #8A8F98;
+  --muted-light: #6B7180;
+  --green: #34D399;
+  --green-bg: rgba(52, 211, 153, 0.08);
+  --green-border: rgba(52, 211, 153, 0.25);
+  --red: #F87171;
+  --amber: #FBBF24;
+  --blue: #60A5FA;
+  --purple: #A78BFA;
+
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ═══ BACKGROUND ATMOSPHERE ═══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(201, 168, 76, 0.06), transparent 50%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(201, 168, 76, 0.04), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+main { position: relative; z-index: 1; }
+
+/* ═══ NAVIGATION ═══ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(10, 14, 20, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.nav-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--gold), #B8963F);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: #0A0E14;
+}
+
+.nav-name {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--gold); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+}
+
+/* ═══ CONTAINERS ═══ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.container-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 100px 0;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  section { padding: 60px 0; }
+}
+
+/* ═══ TYPOGRAPHY ═══ */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 500;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(42px, 7vw, 84px);
+  font-weight: 500;
+}
+
+h2 {
+  font-size: clamp(32px, 5vw, 56px);
+  margin-bottom: 28px;
+}
+
+h3 {
+  font-size: clamp(22px, 3vw, 32px);
+  margin-bottom: 16px;
+}
+
+h4 {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.lead {
+  font-size: 19px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 700px;
+}
+
+em { font-style: italic; color: var(--gold); }
+
+/* ═══ HERO / COVER ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 120px;
+  padding-bottom: 80px;
+  position: relative;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 32px;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.hero h1 {
+  margin-bottom: 32px;
+}
+
+.hero h1 .highlight {
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.hero-subtitle {
+  font-size: clamp(17px, 2.2vw, 22px);
+  color: var(--muted);
+  max-width: 640px;
+  line-height: 1.65;
+  margin-bottom: 48px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+  max-width: 640px;
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-meta-label {
+  font-size: 10px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.hero-meta-value {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.scroll-cue::after {
+  content: '';
+  width: 1px;
+  height: 30px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ═══ SECTION: PROBLEM ═══ */
+.problem-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.stat-number {
+  font-family: var(--serif);
+  font-size: 56px;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.problem-pullquote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.5;
+  color: var(--cream);
+  margin-top: 80px;
+  padding: 40px;
+  background: var(--surface);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  max-width: 900px;
+}
+
+.problem-pullquote::before {
+  content: '"';
+  font-size: 80px;
+  color: var(--gold);
+  line-height: 0.5;
+  margin-right: 8px;
+  vertical-align: -20px;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .problem-stats { grid-template-columns: 1fr; }
+  .stat-number { font-size: 44px; }
+}
+
+/* ═══ SECTION: SOLUTION ═══ */
+.solution-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 60px;
+}
+
+.pillar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  transition: all 0.3s;
+}
+
+.pillar:hover {
+  border-color: var(--gold-border);
+  background: var(--card-hover);
+  transform: translateY(-2px);
+}
+
+.pillar-number {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 0.1em;
+}
+
+.pillar h4 {
+  color: var(--cream);
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.pillar p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+  .solution-pillars { grid-template-columns: 1fr; }
+}
+
+/* ═══ SECTION: REPORT PREVIEWS ═══ */
+.report-preview {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.report-preview.reverse {
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.report-preview.reverse .report-content {
+  order: 2;
+}
+
+.report-preview.reverse .report-visual {
+  order: 1;
+}
+
+.report-content h3 {
+  color: var(--cream);
+}
+
+.report-content .lead {
+  margin-bottom: 24px;
+}
+
+.report-features {
+  list-style: none;
+  margin-bottom: 32px;
+}
+
+.report-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text);
+}
+
+.report-features li::before {
+  content: '→';
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.report-features li:last-child { border-bottom: none; }
+
+.report-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: var(--gold);
+  color: #0A0E14;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.3s;
+}
+
+.report-cta:hover {
+  background: var(--gold-bright);
+  transform: translateX(4px);
+  box-shadow: 0 10px 30px rgba(201, 168, 76, 0.25);
+}
+
+.report-cta::after {
+  content: '→';
+  font-size: 16px;
+}
+
+/* Mock report thumbnail */
+.report-visual {
+  position: relative;
+}
+
+.mock-report {
+  background: linear-gradient(180deg, #0F1923 0%, #0A1018 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.05);
+}
+
+.mock-report::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright), var(--gold));
+}
+
+.mock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 20px;
+}
+
+.mock-logo {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.mock-logo span {
+  display: block;
+  font-family: var(--sans);
+  font-size: 8px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.mock-rating {
+  text-align: right;
+}
+
+.mock-rating-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.mock-rating-label {
+  font-size: 7px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mock-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.mock-subtitle {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.mock-section {
+  margin-bottom: 14px;
+}
+
+.mock-section-label {
+  font-size: 7px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.mock-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.mock-bar-fill {
+  height: 6px;
+  border-radius: 2px;
+  background: var(--gold);
+}
+
+.mock-bar-empty {
+  height: 6px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.06);
+  flex: 1;
+}
+
+.mock-text-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mock-text-line {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 1px;
+}
+
+.mock-text-line.short { width: 60%; }
+.mock-text-line.medium { width: 80%; }
+
+.mock-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mock-footer-text {
+  font-size: 7px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mock-stamp {
+  font-family: var(--mono);
+  font-size: 7px;
+  color: var(--gold);
+  padding: 3px 8px;
+  border: 1px solid var(--gold-border);
+  border-radius: 3px;
+}
+
+/* Comparison variant */
+.mock-report-comparison .mock-title { font-size: 17px; }
+
+.mock-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.mock-compare-col {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 8px 6px;
+  text-align: center;
+}
+
+.mock-compare-col.winner { border-color: var(--gold-border); background: var(--gold-muted); }
+
+.mock-compare-label {
+  font-size: 7px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.mock-compare-score {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.mock-compare-col.winner .mock-compare-score { color: var(--gold); }
+
+@media (max-width: 900px) {
+  .report-preview,
+  .report-preview.reverse {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .report-preview.reverse .report-content { order: 2; }
+  .report-preview.reverse .report-visual { order: 1; }
+  .mock-report { max-width: 320px; margin: 0 auto; }
+}
+
+/* ═══ SECTION: SCORING ENGINE ═══ */
+.scoring-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 50px;
+  margin-top: 60px;
+}
+
+.scoring-params {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 14px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-row:hover {
+  border-color: var(--gold-border);
+  transform: translateX(4px);
+}
+
+.score-row-bar {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--gold-muted), transparent);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.score-row > * { position: relative; z-index: 1; }
+
+.score-name {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.score-name small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted-light);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.score-weight {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.credit-ladder {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  position: sticky;
+  top: 100px;
+}
+
+.credit-ladder h4 {
+  color: var(--gold);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 20px;
+}
+
+.credit-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.credit-row:last-child { border-bottom: none; }
+
+.credit-badge {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  padding: 4px 0;
+  text-align: center;
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  border-radius: 4px;
+}
+
+.credit-label {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.credit-range {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.schema-callout {
+  margin-top: 40px;
+  padding: 28px;
+  background: linear-gradient(135deg, var(--gold-muted), transparent);
+  border: 1px solid var(--gold-border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.schema-callout-icon {
+  font-size: 40px;
+  color: var(--gold);
+  font-family: var(--serif);
+}
+
+.schema-callout-text {
+  flex: 1;
+  min-width: 280px;
+}
+
+.schema-callout h4 {
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+
+.schema-callout p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.schema-callout-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--gold-border);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.schema-callout-btn:hover {
+  background: var(--gold);
+  color: #0A0E14;
+}
+
+@media (max-width: 900px) {
+  .scoring-grid { grid-template-columns: 1fr; }
+  .credit-ladder { position: static; }
+}
+
+/* ═══ SECTION: LUXURY INDEX ═══ */
+.luxury-bar-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px;
+  margin-top: 60px;
+}
+
+.luxury-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.luxury-bar-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.luxury-bar-scale {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted-light);
+}
+
+.luxury-bar {
+  position: relative;
+  height: 48px;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.luxury-segment {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-right: 1px dashed rgba(255,255,255,0.1);
+}
+
+.luxury-segment:last-child { border-right: none; }
+
+.luxury-segment-standard { background: linear-gradient(180deg, rgba(156,163,175,0.2), rgba(156,163,175,0.05)); }
+.luxury-segment-premium { background: linear-gradient(180deg, rgba(96,165,250,0.2), rgba(96,165,250,0.05)); }
+.luxury-segment-luxury { background: linear-gradient(180deg, rgba(201,168,76,0.25), rgba(201,168,76,0.08)); }
+.luxury-segment-ultra { background: linear-gradient(180deg, rgba(167,139,250,0.2), rgba(167,139,250,0.05)); }
+
+.luxury-segment-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.luxury-segment-range {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.luxury-pillars {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.luxury-pillar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 16px;
+  text-align: center;
+  position: relative;
+}
+
+.luxury-pillar-icon {
+  font-family: var(--serif);
+  font-size: 24px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.luxury-pillar-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.luxury-pillar-desc {
+  font-size: 10px;
+  color: var(--muted-light);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .luxury-pillars { grid-template-columns: repeat(2, 1fr); }
+  .luxury-segment-range { display: none; }
+  .luxury-bar-wrap { padding: 24px; }
+}
+
+/* ═══ SECTION: CALCULATORS (DEMOS) ═══ */
+.demo-wrap {
+  margin-top: 60px;
+}
+
+.demo-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.demo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.demo-title-block { flex: 1; min-width: 240px; }
+
+.demo-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.demo-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+
+.demo-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.demo-cta {
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid var(--gold-border);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.demo-cta:hover {
+  background: var(--gold);
+  color: #0A0E14;
+}
+
+/* Input preview (showing what advisor entered) */
+.demo-inputs {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.demo-inputs-label {
+  font-size: 10px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.demo-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 24px;
+}
+
+.demo-input-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 12px;
+}
+
+.demo-input-row span:first-child { color: var(--muted); }
+.demo-input-row span:last-child { color: var(--text); font-family: var(--mono); font-weight: 500; }
+
+/* Winner banner */
+.demo-winner {
+  background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(52,211,153,0.02));
+  border: 1px solid var(--green-border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.demo-winner-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.demo-winner-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+
+.demo-winner-saving {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* Comparison cards side by side */
+.demo-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.demo-project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.demo-project-card.winner { border-color: var(--green-border); }
+
+.demo-project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.demo-project-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-project-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.demo-project-badge.a { color: var(--gold); background: var(--gold-muted); }
+.demo-project-badge.b { color: var(--green); background: var(--green-bg); }
+
+.demo-project-name {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.demo-winner-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--green);
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.demo-psf-block {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  background: var(--bg);
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
+
+.demo-psf-item { text-align: center; }
+
+.demo-psf-label {
+  font-size: 8px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+
+.demo-psf-value {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.demo-psf-value.highlight { color: var(--cream); }
+
+.demo-psf-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 4px 8px;
+}
+
+.demo-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 11px;
+}
+
+.demo-line span:first-child { color: var(--muted); }
+.demo-line span:last-child { color: var(--text); font-family: var(--mono); font-weight: 500; }
+
+.demo-line.add span:last-child { color: var(--red); }
+.demo-line.add span:last-child::before { content: '+'; }
+
+.demo-line.sub span:last-child { color: var(--green); }
+.demo-line.sub span:last-child::before { content: '−'; }
+
+.demo-line.total {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.demo-line.total span { font-weight: 700; }
+.demo-line.total span:first-child { color: var(--cream); }
+
+.demo-net {
+  margin-top: 10px;
+  padding: 10px 0;
+  border-top: 2px solid var(--gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.demo-net.winner { border-top-color: var(--green); }
+
+.demo-net-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.demo-net-value {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--cream);
+}
+
+.demo-net.winner .demo-net-value { color: var(--green); }
+
+/* OTP vs CLP specific */
+.demo-breakeven {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.demo-breakeven-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.demo-breakeven-label {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.demo-breakeven-value {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.demo-breakeven-hint {
+  font-size: 9px;
+  color: var(--muted-light);
+  margin-top: 4px;
+}
+
+.demo-insight {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.6;
+  border-left: 3px solid var(--gold);
+}
+
+.demo-insight strong { color: var(--gold); }
+
+@media (max-width: 900px) {
+  .demo-comparison { grid-template-columns: 1fr; }
+  .demo-inputs-grid { grid-template-columns: 1fr; }
+  .demo-section { padding: 24px; }
+  .demo-breakeven { grid-template-columns: 1fr; }
+}
+
+/* ═══ SECTION: TRACTION ═══ */
+.traction-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 60px;
+}
+
+.traction-stat {
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.traction-stat::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.traction-number {
+  font-family: var(--serif);
+  font-size: 48px;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.traction-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.milestones {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.milestone {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  position: relative;
+}
+
+.milestone-marker {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.milestone h4 {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+
+.milestone p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .traction-grid { grid-template-columns: repeat(2, 1fr); }
+  .milestones { grid-template-columns: 1fr; }
+}
+
+/* ═══ SECTION: BUSINESS MODEL ═══ */
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 60px;
+}
+
+.revenue-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.revenue-card.primary {
+  border-color: var(--gold-border);
+  background: linear-gradient(135deg, var(--card), var(--gold-muted));
+}
+
+.revenue-card.primary::before {
+  content: 'PRIMARY';
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  padding: 3px 10px;
+  background: var(--gold);
+  color: #0A0E14;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  border-radius: 3px;
+}
+
+.revenue-number {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+}
+
+.revenue-card h4 {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+
+.revenue-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.revenue-detail {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.independence-statement {
+  margin-top: 60px;
+  padding: 40px;
+  background: var(--surface);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  max-width: 900px;
+}
+
+.independence-statement p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 21px;
+  line-height: 1.6;
+  color: var(--cream);
+}
+
+.independence-statement p::before {
+  content: '"';
+  font-size: 60px;
+  color: var(--gold);
+  line-height: 0.5;
+  margin-right: 8px;
+  vertical-align: -18px;
+  opacity: 0.5;
+}
+
+@media (max-width: 900px) {
+  .revenue-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══ SECTION: THE ASK ═══ */
+.ask-section {
+  background: linear-gradient(180deg, var(--bg), var(--surface));
+  border-top: 1px solid var(--gold-border);
+  padding: 100px 0;
+  text-align: center;
+}
+
+.ask-eyebrow {
+  justify-content: center;
+}
+
+.ask-eyebrow::after {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.ask-terms {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 800px;
+  margin: 60px auto 40px;
+}
+
+.ask-term {
+  padding: 28px 20px;
+  background: var(--card);
+  border: 1px solid var(--gold-border);
+  border-radius: 12px;
+}
+
+.ask-term-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.ask-term-value {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.ask-term-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.use-of-funds {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.use-of-funds-title {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.fund-allocation {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.fund-item {
+  text-align: center;
+  padding: 20px 10px;
+  border-right: 1px solid var(--border);
+}
+
+.fund-item:last-child { border-right: none; }
+
+.fund-pct {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.fund-label {
+  font-size: 11px;
+  color: var(--cream);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.fund-sub {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.ask-contact {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-label {
+  font-size: 10px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.contact-value {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--cream);
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .ask-terms { grid-template-columns: 1fr; }
+  .fund-allocation { grid-template-columns: 1fr; }
+  .fund-item { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+  .fund-item:last-child { border-bottom: none; }
+}
+
+/* ═══ FOOTER ═══ */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 50px 0 30px;
+  text-align: center;
+}
+
+.footer-mark {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.footer-tagline {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.footer-disclaimer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--muted-light);
+  line-height: 1.6;
+}
+
+/* ═══ SCROLL REVEAL ═══ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section dividers */
+.section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 200px;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.section-divider-icon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav>
+  <div class="nav-wrap">
+    <a href="#" class="nav-brand">
+      <div class="nav-mark">S</div>
+      <div class="nav-name">SafeNest</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#reports">Reports</a></li>
+      <li><a href="#scoring">Scoring</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#ask">The Ask</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container-narrow">
+    <div class="hero-tag">Pre-Seed · Confidential · 2026</div>
+    <h1>
+      The <span class="highlight">Moody's</span><br>
+      of Residential<br>
+      Real Estate.
+    </h1>
+    <p class="hero-subtitle">
+      India's first independent, buyer-side rating agency for residential real estate. Proprietary scoring, AI-powered due diligence, and structural independence — built for the ₹38 lakh crore market that has never had an honest analyst.
+    </p>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Headquartered</div>
+        <div class="hero-meta-value">Hyderabad</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Founded</div>
+        <div class="hero-meta-value">2025</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Status</div>
+        <div class="hero-meta-value">RERA Registered</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Scroll to Explore</div>
+</section>
+
+<!-- ═══ PROBLEM ═══ -->
+<section id="problem">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Part One · The Problem</div>
+      <h2>The largest asset class<br>with zero buyer-side analysts.</h2>
+      <p class="lead">
+        Indians spend ₹38 lakh crore annually on residential real estate. Every other financial product at this scale has independent analytical infrastructure — equity has research houses, bonds have rating agencies, mutual funds have Morningstar. Real estate has brokers. That's it.
+      </p>
+    </div>
+
+    <div class="problem-stats reveal">
+      <div class="stat-card">
+        <div class="stat-number">₹10-20L</div>
+        <div class="stat-label">
+          Average capital loss per buyer from un-analyzed project decisions — pre-EMI, delays, hidden costs, and mis-priced risk.
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">
+          Of buyers never compute the true 4-year cost of their purchase. They decide on sticker price alone.
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">0</div>
+        <div class="stat-label">
+          Independent rating agencies exist today for residential real estate in India. Every broker represents the builder.
+        </div>
+      </div>
+    </div>
+
+    <div class="problem-pullquote reveal">
+      In a market where a single bad decision costs more than a lifetime of savings, the buyer walks in completely unarmed. SafeNest exists to change that.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOLUTION ═══ -->
+<section id="solution" style="background: var(--surface);">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Part Two · The Solution</div>
+      <h2>An independent rating agency,<br>built for the buyer alone.</h2>
+      <p class="lead">
+        SafeNest is a RERA-registered, data-driven residential real estate rating agency. We represent buyers exclusively. We score projects using a proprietary 8-parameter model. We publish credit ratings from AAA to B. And we structure our economics so that buyer outcomes and SafeNest outcomes are permanently aligned.
+      </p>
+    </div>
+
+    <div class="solution-pillars reveal">
+      <div class="pillar">
+        <div class="pillar-number">01 / FOUR</div>
+        <h4>Structurally Independent</h4>
+        <p>SafeNest earns the same commission regardless of which project the buyer selects. Our advisory is genuinely unbiased because no builder can pay for a higher rating. This neutrality is a feature of the business model, not a promise.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">02 / FOUR</div>
+        <h4>Proprietary Scoring</h4>
+        <p>Every project is scored on 104 parameters across legal, financial, construction, location, product, JV compliance, and demand dimensions. Output is a single AAA-to-B rating plus a proprietary Luxury Index on the 100-point scale.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">03 / FOUR</div>
+        <h4>AI-Powered Operations</h4>
+        <p>Scoring analysis, legal document review, and report generation run on Claude. Data scraping on Apify. Workflow automation on n8n. A team of one operates at the capacity of a team of twelve.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">04 / FOUR</div>
+        <h4>Published Ratings</h4>
+        <p>Scores are published to a public Score Directory. Buyers, brokers, developers, and journalists can reference them. Over time, the directory becomes the authoritative source of truth for Hyderabad residential projects — then beyond.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF #1: DEEP RESEARCH REPORT ═══ -->
+<section id="reports">
+  <div class="container">
+    <div class="reveal" style="text-align: center; margin-bottom: 40px;">
+      <div class="eyebrow" style="justify-content: center;">Part Three · The Proof</div>
+      <h2>The deliverables speak for themselves.</h2>
+      <p class="lead" style="margin: 0 auto;">
+        Two flagship reports drive every SafeNest advisory engagement. Both are live. Both are viewable right now.
+      </p>
+    </div>
+
+    <div class="report-preview reveal">
+      <div class="report-content">
+        <div class="eyebrow">Deliverable 01</div>
+        <h3>SafeNest Deep Research Report</h3>
+        <p class="lead">
+          The definitive per-project due diligence document. Delivered to every buyer before a booking decision. Ten sections covering legal, financial, construction, location, and product dimensions — with an AAA-to-B rating and a plain-language verdict.
+        </p>
+        <ul class="report-features">
+          <li><strong>Life Vision Opening</strong> — Every report leads with the buyer's future, not with risk.</li>
+          <li><strong>Interactive Score Breakdown</strong> — 8 dimensions with animated bars and per-dimension rationale.</li>
+          <li><strong>Risk & Quality Radar</strong> — Visual hexagonal chart plotting the project against its segment benchmark.</li>
+          <li><strong>Dual-Audience Architecture</strong> — Buyer sees the verdict; advisor sees the negotiation leverage.</li>
+          <li><strong>Designed for Readability</strong> — Cormorant Garamond typography, dark mode, minimum 17px body. Readable at 60+.</li>
+        </ul>
+        <a href="SafeNest_DeepResearch_FINAL.html" target="_blank" class="report-cta">View Live Sample</a>
+      </div>
+
+      <div class="report-visual">
+        <div class="mock-report">
+          <div class="mock-header">
+            <div class="mock-logo">SafeNest<span>Deep Research</span></div>
+            <div class="mock-rating">
+              <div class="mock-rating-badge">AA</div>
+              <div class="mock-rating-label">Credit Rating</div>
+            </div>
+          </div>
+          <div class="mock-title">Phoenix One<br>Bangalore West</div>
+          <div class="mock-subtitle">Kokapet · Luxury Segment · 2BR–4BR</div>
+
+          <div class="mock-section">
+            <div class="mock-section-label">SafeNest Score</div>
+            <div class="mock-bar">
+              <div class="mock-bar-fill" style="width: 82%;"></div>
+              <div class="mock-bar-empty" style="flex: 0 0 18%;"></div>
+            </div>
+            <div style="font-family: var(--mono); font-size: 14px; color: var(--gold); font-weight: 700; margin-top: 4px;">8.2 / 10</div>
+          </div>
+
+          <div class="mock-section">
+            <div class="mock-section-label">Section 02 · Verdict</div>
+            <div class="mock-text-lines">
+              <div class="mock-text-line"></div>
+              <div class="mock-text-line medium"></div>
+              <div class="mock-text-line"></div>
+              <div class="mock-text-line short"></div>
+            </div>
+          </div>
+
+          <div class="mock-section">
+            <div class="mock-section-label">Section 03 · Risk Radar</div>
+            <div class="mock-text-lines">
+              <div class="mock-text-line"></div>
+              <div class="mock-text-line medium"></div>
+            </div>
+          </div>
+
+          <div class="mock-footer">
+            <div class="mock-footer-text">Confidential · Buyer Report</div>
+            <div class="mock-stamp">v2.4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF #2: COMPARISON REPORT ═══ -->
+<section style="background: var(--surface);">
+  <div class="container">
+    <div class="report-preview reverse reveal">
+      <div class="report-content">
+        <div class="eyebrow">Deliverable 02</div>
+        <h3>Multi-Project Comparison Report</h3>
+        <p class="lead">
+          When a buyer has shortlisted three projects and cannot decide, SafeNest generates a side-by-side comparison scored against the buyer's exact profile. Budget fit, possession timeline, micro-market preference, purpose — all weighted into a profile match percentage.
+        </p>
+        <ul class="report-features">
+          <li><strong>Three Projects, One Framework</strong> — Every parameter scored consistently across all three.</li>
+          <li><strong>Profile Match %</strong> — Animated counter showing each project's fit to the buyer's criteria.</li>
+          <li><strong>Luxury Index™ Adjusted</strong> — Quality normalization ensures like-to-like comparison.</li>
+          <li><strong>Sticky Rail Navigation</strong> — Persistent visual reference for the three projects throughout the report.</li>
+          <li><strong>Filter Chips</strong> — Users can filter the comparison table by Legal, Financial, Construction, Location, Product.</li>
+        </ul>
+        <a href="SafeNest_ComparisonReport_FINAL.html" target="_blank" class="report-cta">View Live Sample</a>
+      </div>
+
+      <div class="report-visual">
+        <div class="mock-report mock-report-comparison">
+          <div class="mock-header">
+            <div class="mock-logo">SafeNest<span>Comparison Report</span></div>
+          </div>
+          <div class="mock-title">Kokapet Shortlist<br>3-Project Analysis</div>
+          <div class="mock-subtitle">Prepared for end-user · Jan 2026</div>
+
+          <div class="mock-compare-grid">
+            <div class="mock-compare-col winner">
+              <div class="mock-compare-label">Project A</div>
+              <div class="mock-compare-score">8.4</div>
+            </div>
+            <div class="mock-compare-col">
+              <div class="mock-compare-label">Project B</div>
+              <div class="mock-compare-score">7.6</div>
+            </div>
+            <div class="mock-compare-col">
+              <div class="mock-compare-label">Project C</div>
+              <div class="mock-compare-score">6.9</div>
+            </div>
+          </div>
+
+          <div class="mock-section">
+            <div class="mock-section-label">Profile Match</div>
+            <div class="mock-bar">
+              <div class="mock-bar-fill" style="width: 92%;"></div>
+              <div class="mock-bar-empty" style="flex: 0 0 8%;"></div>
+            </div>
+            <div style="font-family: var(--mono); font-size: 13px; color: var(--gold); font-weight: 700; margin-top: 4px;">92% — Project A</div>
+          </div>
+
+          <div class="mock-section">
+            <div class="mock-section-label">Recommendation</div>
+            <div class="mock-text-lines">
+              <div class="mock-text-line"></div>
+              <div class="mock-text-line medium"></div>
+              <div class="mock-text-line short"></div>
+            </div>
+          </div>
+
+          <div class="mock-footer">
+            <div class="mock-footer-text">Confidential · Valid 30 Days</div>
+            <div class="mock-stamp">v2.4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF #3: SCORING ENGINE ═══ -->
+<section id="scoring">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Deliverable 03 · Proprietary IP</div>
+      <h2>The SafeNest Scoring Engine.</h2>
+      <p class="lead">
+        Every project is evaluated against 104 data points across 8 weighted parameters. Formulas are proprietary and version-controlled. Outputs are a single composite score on a 10-point scale, mapped to a credit rating from AAA to B.
+      </p>
+    </div>
+
+    <div class="scoring-grid reveal">
+      <div class="scoring-params">
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 90%;"></div>
+          <div class="score-name">Legal & Regulatory<small>RERA, HMDA, title, agreement compliance</small></div>
+          <div class="score-weight">18%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 90%;"></div>
+          <div class="score-name">Construction Progress<small>Stage, timeline, density, open space</small></div>
+          <div class="score-weight">18%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 75%;"></div>
+          <div class="score-name">Developer Track Record<small>Delivery history, NCLT cases, complaints</small></div>
+          <div class="score-weight">15%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 75%;"></div>
+          <div class="score-name">Location Quality<small>ORR distance, metro, IT hubs, infra</small></div>
+          <div class="score-weight">15%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 60%;"></div>
+          <div class="score-name">Product Quality<small>Amenities, carpet efficiency, specifications</small></div>
+          <div class="score-weight">12%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 50%;"></div>
+          <div class="score-name">Escrow & Financial<small>Bank approvals, escrow compliance, payments</small></div>
+          <div class="score-weight">10%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 50%;"></div>
+          <div class="score-name">JV Compliance<small>Joint venture structure, disclosures</small></div>
+          <div class="score-weight">10%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-row-bar" style="width: 10%;"></div>
+          <div class="score-name">Demand Signal<small>Exit liquidity, market absorption</small></div>
+          <div class="score-weight">2%</div>
+        </div>
+      </div>
+
+      <div class="credit-ladder">
+        <h4>Credit Rating Scale</h4>
+        <div class="credit-row">
+          <div class="credit-badge">AAA</div>
+          <div class="credit-label">Exceptional</div>
+          <div class="credit-range">8.5–10</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-badge">AA</div>
+          <div class="credit-label">Very Strong</div>
+          <div class="credit-range">7.5–8.4</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-badge">A</div>
+          <div class="credit-label">Good</div>
+          <div class="credit-range">6.5–7.4</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-badge">BBB</div>
+          <div class="credit-label">Adequate</div>
+          <div class="credit-range">5.5–6.4</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-badge">BB</div>
+          <div class="credit-label">Speculative</div>
+          <div class="credit-range">4.5–5.4</div>
+        </div>
+        <div class="credit-row">
+          <div class="credit-badge">B</div>
+          <div class="credit-label">High Risk</div>
+          <div class="credit-range">&lt; 4.5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-callout reveal">
+      <div class="schema-callout-icon">∎</div>
+      <div class="schema-callout-text">
+        <h4>104-Field Due Diligence Database</h4>
+        <p>Every scoring input is structured, version-controlled, and auditable. Built on Airtable, migrating to Postgres at scale.</p>
+      </div>
+      <a href="SafeNest_DataInput_Grid_v2_4.docx" download class="schema-callout-btn">View Schema →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF #4: LUXURY INDEX ═══ -->
+<section style="background: var(--surface);" id="luxury">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Deliverable 04 · Moat</div>
+      <h2>The Luxury Index™<br>—a first for Indian real estate.</h2>
+      <p class="lead">
+        A proprietary 100-point quality score that segments every project into Standard, Premium, Luxury, or Ultra Luxury bands. Used inside every SafeNest tool to enable quality-adjusted pricing comparison — the first framework of its kind in the Indian residential market.
+      </p>
+    </div>
+
+    <div class="luxury-bar-wrap reveal">
+      <div class="luxury-bar-header">
+        <div class="luxury-bar-title">Segmentation Framework</div>
+        <div class="luxury-bar-scale">0 — 100 scale</div>
+      </div>
+      <div class="luxury-bar">
+        <div class="luxury-segment luxury-segment-standard">
+          <div class="luxury-segment-name">Standard</div>
+          <div class="luxury-segment-range">0 — 45</div>
+        </div>
+        <div class="luxury-segment luxury-segment-premium">
+          <div class="luxury-segment-name">Premium</div>
+          <div class="luxury-segment-range">46 — 70</div>
+        </div>
+        <div class="luxury-segment luxury-segment-luxury">
+          <div class="luxury-segment-name">Luxury</div>
+          <div class="luxury-segment-range">71 — 85</div>
+        </div>
+        <div class="luxury-segment luxury-segment-ultra">
+          <div class="luxury-segment-name">Ultra Luxury</div>
+          <div class="luxury-segment-range">86 — 100</div>
+        </div>
+      </div>
+
+      <div class="luxury-pillars">
+        <div class="luxury-pillar">
+          <div class="luxury-pillar-icon">◆</div>
+          <div class="luxury-pillar-name">Construction</div>
+          <div class="luxury-pillar-desc">Mivan, ceiling height, stilt clearance</div>
+        </div>
+        <div class="luxury-pillar">
+          <div class="luxury-pillar-icon">◊</div>
+          <div class="luxury-pillar-name">Density</div>
+          <div class="luxury-pillar-desc">Units per acre, lift ratio, floor plate</div>
+        </div>
+        <div class="luxury-pillar">
+          <div class="luxury-pillar-icon">✦</div>
+          <div class="luxury-pillar-name">Amenities</div>
+          <div class="luxury-pillar-desc">SFT per unit, open space, premium features</div>
+        </div>
+        <div class="luxury-pillar">
+          <div class="luxury-pillar-icon">▲</div>
+          <div class="luxury-pillar-name">Spatial</div>
+          <div class="luxury-pillar-desc">Unit size, corridor width, door height</div>
+        </div>
+        <div class="luxury-pillar">
+          <div class="luxury-pillar-icon">●</div>
+          <div class="luxury-pillar-name">Infrastructure</div>
+          <div class="luxury-pillar-desc">Parking ratio, floor count, land per unit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF #5: CALCULATORS (DEMOS) ═══ -->
+<section id="tools">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Deliverable 05 · Advisor Analytics Suite</div>
+      <h2>Financial tools no<br>other advisor has.</h2>
+      <p class="lead">
+        Two proprietary calculators embedded into every advisory session. They do the math that brokers never show buyers — and deliver the moments that convert interest into commitment.
+      </p>
+    </div>
+
+    <!-- DEMO 1: TRUE COST CALCULATOR -->
+    <div class="demo-wrap reveal">
+      <div class="demo-section">
+        <div class="demo-header">
+          <div class="demo-title-block">
+            <div class="demo-tag">Tool 01</div>
+            <div class="demo-title">True Cost Calculator™</div>
+            <div class="demo-subtitle">Compares 4-year economic cost. Factors pre-EMI interest, stamp duty, maintenance, rental income, and proprietary Luxury Index™ normalization.</div>
+          </div>
+          <a href="true-cost-calculator.html" class="demo-cta">Try Interactive →</a>
+        </div>
+
+        <!-- Input summary -->
+        <div class="demo-inputs">
+          <div class="demo-inputs-label">Scenario · Kokapet Premium Segment · 1,250 sft</div>
+          <div class="demo-inputs-grid">
+            <div class="demo-input-row"><span>Project A (Under-construction)</span><span>₹7,000 /sft</span></div>
+            <div class="demo-input-row"><span>Project B (Ready-to-move)</span><span>₹9,000 /sft</span></div>
+            <div class="demo-input-row"><span>A: Handover</span><span>48 months</span></div>
+            <div class="demo-input-row"><span>B: Handover</span><span>Ready</span></div>
+            <div class="demo-input-row"><span>A: Luxury Index</span><span>55 · Premium</span></div>
+            <div class="demo-input-row"><span>B: Luxury Index</span><span>52 · Premium</span></div>
+          </div>
+        </div>
+
+        <!-- Winner banner -->
+        <div class="demo-winner">
+          <div class="demo-winner-label">4-Year True Cost Winner</div>
+          <div class="demo-winner-title">Ready-to-Move Project</div>
+          <div class="demo-winner-saving">Saves ₹1.1L (1.0% less) — but that's not the story</div>
+        </div>
+
+        <!-- Comparison cards -->
+        <div class="demo-comparison">
+          <!-- Project A -->
+          <div class="demo-project-card">
+            <div class="demo-project-header">
+              <div class="demo-project-id">
+                <div class="demo-project-badge a">A</div>
+                <div class="demo-project-name">Under-Construction</div>
+              </div>
+            </div>
+            <div class="demo-psf-block">
+              <div class="demo-psf-item">
+                <div class="demo-psf-label">Quoted PSF</div>
+                <div class="demo-psf-value">₹7,000</div>
+              </div>
+              <div class="demo-psf-divider"></div>
+              <div class="demo-psf-item">
+                <div class="demo-psf-label">True PSF</div>
+                <div class="demo-psf-value highlight">₹8,920</div>
+              </div>
+            </div>
+            <div class="demo-line"><span>Base Cost</span><span>₹87.5L</span></div>
+            <div class="demo-line add"><span>GST (5%)</span><span>₹4.38L</span></div>
+            <div class="demo-line total"><span>Acquisition</span><span>₹91.88L</span></div>
+            <div class="demo-line add"><span>Stamp Duty (7.5%)</span><span>₹6.56L</span></div>
+            <div class="demo-line add"><span>Pre-EMI Interest</span><span>₹13.06L</span></div>
+            <div class="demo-line add"><span>Maintenance</span><span>₹0.00L</span></div>
+            <div class="demo-line sub"><span>Rental Income</span><span>₹0.00L</span></div>
+            <div class="demo-net">
+              <div class="demo-net-label">Net True Cost</div>
+              <div class="demo-net-value">₹111.5L</div>
+            </div>
+          </div>
+
+          <!-- Project B -->
+          <div class="demo-project-card winner">
+            <div class="demo-project-header">
+              <div class="demo-project-id">
+                <div class="demo-project-badge b">B</div>
+                <div class="demo-project-name">Ready-to-Move</div>
+              </div>
+              <div class="demo-winner-tag">✓ Lower</div>
+            </div>
+            <div class="demo-psf-block">
+              <div class="demo-psf-item">
+                <div class="demo-psf-label">Quoted PSF</div>
+                <div class="demo-psf-value">₹9,000</div>
+              </div>
+              <div class="demo-psf-divider"></div>
+              <div class="demo-psf-item">
+                <div class="demo-psf-label">True PSF</div>
+                <div class="demo-psf-value highlight">₹8,832</div>
+              </div>
+            </div>
+            <div class="demo-line"><span>Base Cost</span><span>₹112.5L</span></div>
+            <div class="demo-line"><span>GST</span><span>Not applicable</span></div>
+            <div class="demo-line total"><span>Acquisition</span><span>₹112.5L</span></div>
+            <div class="demo-line add"><span>Stamp Duty (7.5%)</span><span>₹8.44L</span></div>
+            <div class="demo-line add"><span>Pre-EMI Interest</span><span>₹0.00L</span></div>
+            <div class="demo-line add"><span>Maintenance</span><span>₹2.40L</span></div>
+            <div class="demo-line sub"><span>Rental Income</span><span>₹12.93L</span></div>
+            <div class="demo-net winner">
+              <div class="demo-net-label">Net True Cost</div>
+              <div class="demo-net-value">₹110.4L</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-insight">
+          <strong>The insight:</strong> A buyer walking in sees a ₹25L gap between the two quoted prices and assumes the under-construction project saves them a fortune. The True Cost Calculator reveals the gap is actually ₹1.1L — and in the opposite direction. The sticker price was an illusion. This is the moment trust converts to commitment.
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 2: OTP vs CLP -->
+    <div class="demo-wrap reveal">
+      <div class="demo-section">
+        <div class="demo-header">
+          <div class="demo-title-block">
+            <div class="demo-tag">Tool 02</div>
+            <div class="demo-title">OTP vs CLP Optimizer</div>
+            <div class="demo-subtitle">Determines the optimal payment plan for a selected project. Quality-checked against the buyer's opportunity cost of capital, tax bracket, and SafeNest developer risk rating.</div>
+          </div>
+          <a href="otp-vs-clp-calculator.html" class="demo-cta">Try Interactive →</a>
+        </div>
+
+        <div class="demo-inputs">
+          <div class="demo-inputs-label">Scenario · Kokapet Premium · Buyer profile</div>
+          <div class="demo-inputs-grid">
+            <div class="demo-input-row"><span>Project Base Price</span><span>₹1.125 Cr</span></div>
+            <div class="demo-input-row"><span>Handover Timeline</span><span>30 months</span></div>
+            <div class="demo-input-row"><span>Builder's OTP Discount</span><span>8%</span></div>
+            <div class="demo-input-row"><span>Buyer's Opportunity Cost</span><span>8% · Moderate</span></div>
+            <div class="demo-input-row"><span>Tax Bracket</span><span>30%</span></div>
+            <div class="demo-input-row"><span>Developer Rating</span><span>A · Good</span></div>
+          </div>
+        </div>
+
+        <div class="demo-winner">
+          <div class="demo-winner-label">Optimal Payment Plan</div>
+          <div class="demo-winner-title">Construction-Linked</div>
+          <div class="demo-winner-saving">Saves ₹6.3L (4.8% less) — the 8% OTP discount wasn't enough</div>
+        </div>
+
+        <div class="demo-comparison">
+          <!-- OTP -->
+          <div class="demo-project-card">
+            <div class="demo-project-header">
+              <div class="demo-project-id">
+                <div class="demo-project-badge a">OTP</div>
+                <div class="demo-project-name">One-Time Payment</div>
+              </div>
+            </div>
+            <div class="demo-line"><span>Base Price</span><span>₹112.5L</span></div>
+            <div class="demo-line sub"><span>OTP Discount (8%)</span><span>₹9.00L</span></div>
+            <div class="demo-line total"><span>Discounted Price</span><span>₹103.5L</span></div>
+            <div class="demo-line add"><span>Stamp Duty (7.5%)</span><span>₹7.76L</span></div>
+            <div class="demo-line add"><span>Opportunity Cost</span><span>₹20.70L</span></div>
+            <div class="demo-net">
+              <div class="demo-net-label">Net Cost</div>
+              <div class="demo-net-value">₹131.96L</div>
+            </div>
+          </div>
+
+          <!-- CLP -->
+          <div class="demo-project-card winner">
+            <div class="demo-project-header">
+              <div class="demo-project-id">
+                <div class="demo-project-badge b">CLP</div>
+                <div class="demo-project-name">Construction-Linked</div>
+              </div>
+              <div class="demo-winner-tag">✓ Winner</div>
+            </div>
+            <div class="demo-line"><span>Base Price (Full)</span><span>₹112.5L</span></div>
+            <div class="demo-line add"><span>Stamp Duty (7.5%)</span><span>₹8.44L</span></div>
+            <div class="demo-line add"><span>Pre-EMI Interest</span><span>₹10.00L</span></div>
+            <div class="demo-line sub"><span>Opportunity Gain</span><span>₹2.28L</span></div>
+            <div class="demo-line sub"><span>Section 24 Tax Savings</span><span>₹3.00L</span></div>
+            <div class="demo-net winner">
+              <div class="demo-net-label">Net Cost</div>
+              <div class="demo-net-value">₹125.66L</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-breakeven">
+          <div class="demo-breakeven-card">
+            <div class="demo-breakeven-label">OTP beats CLP at discount of</div>
+            <div class="demo-breakeven-value">13.2%</div>
+            <div class="demo-breakeven-hint">Current offer is 8% — insufficient</div>
+          </div>
+          <div class="demo-breakeven-card">
+            <div class="demo-breakeven-label">CLP beats OTP at opp cost of</div>
+            <div class="demo-breakeven-value">5.1%</div>
+            <div class="demo-breakeven-hint">Buyer is at 8% — CLP dominates</div>
+          </div>
+        </div>
+
+        <div class="demo-insight">
+          <strong>The insight:</strong> A buyer hears "8% discount" and instinctively thinks it's a great deal. The Optimizer reveals that for this buyer's opportunity cost and tax bracket, the builder needs to offer 13.2% for OTP to be mathematically defensible. This is ammunition — SafeNest advisors use it to negotiate better terms on behalf of buyers.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRACTION ═══ -->
+<section style="background: var(--surface);" id="traction">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Part Four · Traction</div>
+      <h2>Early numbers,<br>clear trajectory.</h2>
+      <p class="lead">
+        SafeNest is at pre-seed stage with a built product, a functioning scoring engine, and an operational advisory pipeline. The roadmap is designed around ratings published — the north-star metric that compounds brand authority.
+      </p>
+    </div>
+
+    <div class="traction-grid reveal">
+      <div class="traction-stat">
+        <div class="traction-number">104</div>
+        <div class="traction-label">Schema Fields Active</div>
+      </div>
+      <div class="traction-stat">
+        <div class="traction-number">6</div>
+        <div class="traction-label">Micro-Markets Covered</div>
+      </div>
+      <div class="traction-stat">
+        <div class="traction-number">2</div>
+        <div class="traction-label">Proprietary Calculators</div>
+      </div>
+      <div class="traction-stat">
+        <div class="traction-number">5</div>
+        <div class="traction-label">Live Deliverables</div>
+      </div>
+    </div>
+
+    <div class="milestones reveal">
+      <div class="milestone">
+        <div class="milestone-marker">DAY 45</div>
+        <h4>10 Projects Rated</h4>
+        <p>Initial Score Directory goes live with 10 Hyderabad projects rated across Kollur, Kokapet, Tellapur, and Narsingi.</p>
+      </div>
+      <div class="milestone">
+        <div class="milestone-marker">MONTH 6</div>
+        <h4>30 Projects Rated</h4>
+        <p>Score Directory achieves critical mass for West Hyderabad ORR corridor. First DaaS channel-partner subscriptions close.</p>
+      </div>
+      <div class="milestone">
+        <div class="milestone-marker">MONTH 18</div>
+        <h4>80 Projects Rated</h4>
+        <p>Complete Hyderabad residential coverage. NRI advisory track launched. Bengaluru expansion initiated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BUSINESS MODEL ═══ -->
+<section id="business">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Part Five · Revenue Model</div>
+      <h2>Three revenue streams.<br>One aligned incentive.</h2>
+      <p class="lead">
+        Every revenue line is designed to preserve buyer-side independence. The commission structure is flat across developers. The paid report is optional. The subscription is to channel partners, not buyers. SafeNest's upside aligns with buyer outcomes — not developer ones.
+      </p>
+    </div>
+
+    <div class="revenue-grid reveal">
+      <div class="revenue-card primary">
+        <div class="revenue-number">01 / THREE</div>
+        <h4>Advisory Commission</h4>
+        <p>Flat commission earned at deal closure — same rate regardless of which project the buyer selects. This neutrality is the foundation of SafeNest's independence claim.</p>
+        <div class="revenue-detail">Primary revenue · ~85% of current mix</div>
+      </div>
+      <div class="revenue-card">
+        <div class="revenue-number">02 / THREE</div>
+        <h4>Paid Due Diligence Report</h4>
+        <p>Buyers can purchase the full Deep Research Report for ₹4,999. Positioned as an optional premium; most buyers access it free via advisor path.</p>
+        <div class="revenue-detail">Monetized through Razorpay</div>
+      </div>
+      <div class="revenue-card">
+        <div class="revenue-number">03 / THREE</div>
+        <h4>Data-as-a-Service</h4>
+        <p>Annual subscriptions for channel partners — brokers, wealth managers, NRI advisors — who want access to SafeNest ratings for their own clients.</p>
+        <div class="revenue-detail">Enterprise SaaS model</div>
+      </div>
+    </div>
+
+    <div class="independence-statement reveal">
+      <p>
+        We earn the same commission regardless of which project the buyer chooses. That's not a marketing line. That's the architecture of our business — and the reason our ratings can be trusted when no other rating in Indian real estate can.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THE ASK ═══ -->
+<section class="ask-section" id="ask">
+  <div class="container-narrow">
+    <div class="reveal">
+      <div class="eyebrow ask-eyebrow">Part Six · The Ask</div>
+      <h2>Pre-seed. Clear terms.<br>Defined milestones.</h2>
+      <p class="lead" style="margin: 0 auto;">
+        We're raising a focused pre-seed round to accelerate Score Directory coverage, build the production web stack, and expand advisor operations across West Hyderabad.
+      </p>
+    </div>
+
+    <div class="ask-terms reveal">
+      <div class="ask-term">
+        <div class="ask-term-label">Raising</div>
+        <div class="ask-term-value">₹1 Cr</div>
+        <div class="ask-term-sub">Pre-Seed Round</div>
+      </div>
+      <div class="ask-term">
+        <div class="ask-term-label">Pre-Money</div>
+        <div class="ask-term-value">₹6 Cr</div>
+        <div class="ask-term-sub">Valuation</div>
+      </div>
+      <div class="ask-term">
+        <div class="ask-term-label">Dilution</div>
+        <div class="ask-term-value">14.3%</div>
+        <div class="ask-term-sub">Equity Issued</div>
+      </div>
+    </div>
+
+    <div class="use-of-funds reveal">
+      <div class="use-of-funds-title">Use of Funds</div>
+      <div class="fund-allocation">
+        <div class="fund-item">
+          <div class="fund-pct">50%</div>
+          <div class="fund-label">Operations & Rating Coverage</div>
+          <div class="fund-sub">Scaling to 80 rated projects in 18 months</div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-pct">30%</div>
+          <div class="fund-label">Product & Technology</div>
+          <div class="fund-sub">Next.js migration, Score Directory production</div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-pct">20%</div>
+          <div class="fund-label">Brand & Distribution</div>
+          <div class="fund-sub">Buyer acquisition, NRI channel, partnerships</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ask-contact reveal">
+      <div class="contact-item">
+        <div class="contact-label">Founder & Director</div>
+        <div class="contact-value">Shaik Ameer</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Location</div>
+        <div class="contact-value">Hyderabad, India</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-mark">SafeNest Advisory</div>
+    <div class="footer-tagline">We protect buyers, not builders.</div>
+    <div class="section-divider" style="margin-bottom: 30px;">
+      <div class="section-divider-icon"></div>
+    </div>
+    <div class="footer-disclaimer">
+      <strong>Confidential.</strong> This document is prepared for pre-seed investor review only. All figures, projections, and proprietary methodology descriptions are confidential. Not for public distribution. SafeNest Advisory is a RERA-registered real estate advisory firm. Luxury Index™, True Cost Calculator™, and SafeNest Score™ are proprietary frameworks of SafeNest Advisory. Title verification remains the buyer's responsibility through independent legal counsel.
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script>
+// Scroll reveal
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
