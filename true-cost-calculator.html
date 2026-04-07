@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>True Cost Calculator™ — SafeNest Advisory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0A0E14;
+  --surface: #12171F;
+  --card: #1A1F2A;
+  --card-hover: #1F2530;
+  --border: #252B38;
+  --border-light: #2E3542;
+  --gold: #C9A84C;
+  --gold-bright: #E5C875;
+  --gold-muted: rgba(201, 168, 76, 0.12);
+  --gold-border: rgba(201, 168, 76, 0.25);
+  --cream: #FAF6EE;
+  --text: #E8E4DC;
+  --muted: #8A8F98;
+  --muted-light: #6B7180;
+  --green: #34D399;
+  --green-bg: rgba(52, 211, 153, 0.08);
+  --green-border: rgba(52, 211, 153, 0.25);
+  --red: #F87171;
+  --red-bg: rgba(248, 113, 113, 0.08);
+  --red-border: rgba(248, 113, 113, 0.25);
+  --amber: #FBBF24;
+  --amber-bg: rgba(251, 191, 36, 0.08);
+  --amber-border: rgba(251, 191, 36, 0.25);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(201, 168, 76, 0.05), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* Back button */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(10, 14, 20, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  border-color: var(--gold-border);
+  color: var(--gold);
+}
+
+/* Header */
+.header {
+  padding: 80px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--gold);
+}
+
+.header h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.header-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.header-intro {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 700px;
+  margin-top: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 32px;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px 0;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  color: var(--gold);
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ───── Luxury Index Bar ───── */
+.luxury-bar-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.luxury-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.luxury-bar-title {
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.luxury-bar-title span {
+  display: block;
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--cream);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+
+.luxury-bar-scale {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted-light);
+}
+
+.luxury-bar {
+  position: relative;
+  height: 44px;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 40px;
+  border: 1px solid var(--border);
+}
+
+.lux-seg {
+  flex: 1;
+  position: relative;
+  border-right: 1px dashed rgba(255,255,255,0.1);
+}
+
+.lux-seg:last-child { border-right: none; }
+
+.lux-seg-0 { background: linear-gradient(180deg, rgba(156,163,175,0.2), rgba(156,163,175,0.04)); }
+.lux-seg-1 { background: linear-gradient(180deg, rgba(96,165,250,0.2), rgba(96,165,250,0.04)); }
+.lux-seg-2 { background: linear-gradient(180deg, rgba(201,168,76,0.25), rgba(201,168,76,0.06)); }
+.lux-seg-3 { background: linear-gradient(180deg, rgba(167,139,250,0.2), rgba(167,139,250,0.04)); }
+
+.lux-seg-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.lux-marker {
+  position: absolute;
+  top: -4px;
+  width: 14px;
+  height: 52px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  display: none;
+}
+
+.lux-marker-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--bg), 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.lux-marker.a .lux-marker-dot { background: var(--gold); }
+.lux-marker.b .lux-marker-dot { background: var(--green); }
+
+.lux-marker-label {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.lux-marker.a .lux-marker-label { color: var(--gold); }
+.lux-marker.b .lux-marker-label { color: var(--green); }
+
+.lux-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.lux-proj-info {
+  flex: 1;
+}
+
+.lux-proj-info:last-child { text-align: right; }
+
+.lux-proj-label {
+  font-size: 9px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.lux-proj-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid;
+}
+
+/* ───── Project Card ───── */
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.project-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid;
+}
+
+.project-badge.a {
+  background: var(--gold-muted);
+  border-color: var(--gold-border);
+  color: var(--gold);
+}
+
+.project-badge.b {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.25);
+  color: var(--green);
+}
+
+.project-name-input {
+  flex: 1;
+  min-width: 160px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.project-name-input::placeholder { color: var(--muted-light); }
+
+.segment-chip {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid;
+  display: none;
+}
+
+/* Luxury Index highlight input */
+.luxury-input-wrap {
+  background: var(--bg);
+  border: 1px solid var(--gold-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+/* Input grid */
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+}
+
+.input-grid-divider {
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--border);
+  margin: 6px 0 10px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 5px;
+}
+
+.field-hint {
+  font-size: 9px;
+  color: var(--muted-light);
+  margin-top: 3px;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--gold-border);
+}
+
+.input-prefix,
+.input-suffix {
+  padding: 0 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted-light);
+}
+
+.input-wrap input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  width: 100%;
+  min-width: 0;
+}
+
+.input-wrap input::placeholder { color: var(--muted-light); }
+
+.input-wrap.with-prefix input { padding-left: 4px; }
+.input-wrap.with-suffix input { padding-right: 4px; }
+
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 32px 10px 12px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--border);
+  padding: 2px;
+  transition: background 0.2s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.toggle input { display: none; }
+
+.toggle input:checked + .toggle-switch {
+  background: var(--gold);
+}
+
+.toggle input:checked + .toggle-switch::after {
+  transform: translateX(16px);
+}
+
+.toggle-label {
+  font-size: 11px;
+  color: var(--text);
+}
+
+/* Calculate button */
+.calculate-btn {
+  display: block;
+  width: 100%;
+  padding: 16px 0;
+  background: linear-gradient(135deg, var(--gold), #B8963F);
+  border: none;
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: #0A0E14;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 24px 0;
+  transition: all 0.2s;
+}
+
+.calculate-btn:hover:not(:disabled) {
+  background: var(--gold-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(201, 168, 76, 0.25);
+}
+
+.calculate-btn:disabled {
+  background: var(--border);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* ───── Results ───── */
+#results { display: none; }
+
+.warning {
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.warning.amber {
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+}
+
+.warning.red {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+}
+
+.warning-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.warning.amber .warning-header { color: var(--amber); }
+.warning.red .warning-header { color: var(--red); }
+
+.warning p {
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.norm-toggle {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 18px;
+}
+
+.norm-toggle button {
+  flex: 1;
+  padding: 11px 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.2s;
+}
+
+.norm-toggle button.active {
+  background: var(--gold-muted);
+  border-color: var(--gold-border);
+  color: var(--gold);
+}
+
+.norm-explanation {
+  background: var(--gold-muted);
+  border: 1px solid var(--gold-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+}
+
+.norm-explanation-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.norm-explanation p {
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.norm-explanation strong { color: var(--gold); }
+
+.norm-capped {
+  display: block;
+  margin-top: 4px;
+  color: var(--amber);
+  font-size: 10px;
+}
+
+.winner-banner {
+  background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(52,211,153,0.02));
+  border: 1px solid var(--green-border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.winner-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.winner-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+
+.winner-saving {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.winner-psf {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Result card */
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.result-card.winner { border-color: var(--green-border); }
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.result-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+
+.result-badge.a { color: var(--gold); background: var(--gold-muted); }
+.result-badge.b { color: var(--green); background: var(--green-bg); }
+
+.result-name {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.winner-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--green);
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.psf-block {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  background: var(--bg);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.psf-item { text-align: center; flex: 1; }
+
+.psf-label {
+  font-size: 9px;
+  color: var(--muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.psf-label.highlight { color: var(--gold); }
+
+.psf-value {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.psf-value.highlight { color: var(--cream); }
+
+.psf-divider {
+  width: 1px;
+  background: var(--border);
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 12px;
+}
+
+.line-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-hint {
+  font-size: 9px;
+  color: var(--muted-light);
+  margin-top: 1px;
+}
+
+.line-label { color: var(--muted); }
+
+.line-value {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.line.add .line-value { color: var(--red); }
+.line.add .line-value::before { content: '+'; }
+
+.line.sub .line-value { color: var(--green); }
+.line.sub .line-value::before { content: '−'; }
+
+.line.bold {
+  padding: 10px 0;
+  border-top: 1px solid var(--border-light);
+  margin-top: 4px;
+}
+
+.line.bold .line-label {
+  color: var(--cream);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.line.bold .line-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.net {
+  margin-top: 10px;
+  padding: 14px 0 4px;
+  border-top: 2px solid var(--gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.net.winner { border-top-color: var(--green); }
+
+.net-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.net-value {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--cream);
+}
+
+.net.winner .net-value { color: var(--green); }
+
+/* Disclaimer */
+.disclaimer {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 10px;
+  color: var(--muted-light);
+  line-height: 1.6;
+}
+
+.disclaimer strong { color: var(--muted); }
+
+/* Methodology */
+.method-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
+
+.method-card h4 {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.method-card p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.panel-intro {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--cream);
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+  main { padding: 0 16px 60px; }
+  .header { padding: 70px 0 24px; }
+  .input-grid { grid-template-columns: 1fr; }
+  .luxury-bar-wrap { padding: 18px; }
+  .lux-seg-label { font-size: 8px; }
+  .project-card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<a href="investor-showcase.html" class="back-btn">← Back to Showcase</a>
+
+<main>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-icon">⚖</div>
+    <div>
+      <div class="header-tag">SafeNest Advisory · Advisor Tool</div>
+      <h1>True Cost Calculator™</h1>
+    </div>
+  </div>
+  <p class="header-intro">
+    Compares 4-year economic cost adjusted for quality. Factors pre-EMI interest, stamp duty (Telangana 7.5%), maintenance, rental income, and proprietary Luxury Index™ normalization.
+  </p>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('calculator')">Calculator</button>
+  <button class="tab" onclick="showPanel('methodology')">How It Works</button>
+</div>
+
+<!-- Calculator Panel -->
+<div class="panel active" id="panel-calculator">
+
+  <!-- Luxury Index Bar -->
+  <div class="luxury-bar-wrap">
+    <div class="luxury-bar-header">
+      <div class="luxury-bar-title">
+        Proprietary Quality Score
+        <span>Luxury Index™</span>
+      </div>
+      <div class="luxury-bar-scale">0 — 100 scale</div>
+    </div>
+    <div class="luxury-bar">
+      <div class="lux-seg lux-seg-0"><div class="lux-seg-label">Standard</div></div>
+      <div class="lux-seg lux-seg-1"><div class="lux-seg-label">Premium</div></div>
+      <div class="lux-seg lux-seg-2"><div class="lux-seg-label">Luxury</div></div>
+      <div class="lux-seg lux-seg-3"><div class="lux-seg-label">Ultra</div></div>
+      <div class="lux-marker a" id="lux-marker-A">
+        <div class="lux-marker-dot"></div>
+        <div class="lux-marker-label">A · 0</div>
+      </div>
+      <div class="lux-marker b" id="lux-marker-B">
+        <div class="lux-marker-dot"></div>
+        <div class="lux-marker-label">B · 0</div>
+      </div>
+    </div>
+    <div class="lux-bottom">
+      <div class="lux-proj-info">
+        <div class="lux-proj-label">Project A</div>
+        <span class="lux-proj-chip" id="lux-chip-A" style="display:none;">—</span>
+      </div>
+      <div class="lux-proj-info">
+        <div class="lux-proj-label">Project B</div>
+        <span class="lux-proj-chip" id="lux-chip-B" style="display:none;">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project A -->
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-badge a">A</div>
+      <input type="text" class="project-name-input" id="name_A" placeholder="Project A name" value="Under-Construction Project">
+      <span class="segment-chip" id="segment_A"></span>
+    </div>
+
+    <div class="luxury-input-wrap">
+      <div class="field" style="margin: 0;">
+        <div class="field-label">Luxury Index™ (Required)</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="luxuryIndex_A" placeholder="e.g., 55" oninput="updateLuxuryBar()">
+          <span class="input-suffix">/ 100</span>
+        </div>
+        <div class="field-hint">From SafeNest Schema · 0-100 scale</div>
+      </div>
+    </div>
+
+    <div class="input-grid">
+      <div class="field">
+        <div class="field-label">Size</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="size_A" value="1250">
+          <span class="input-suffix">sft</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Base Price</div>
+        <div class="input-wrap with-prefix with-suffix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="psf_A">
+          <span class="input-suffix">/sft</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Handover</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="handoverMonths_A" value="36">
+          <span class="input-suffix">months</span>
+        </div>
+        <div class="field-hint">0 = ready to move</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Payment Plan</div>
+        <div class="select-wrap">
+          <select id="paymentPlan_A">
+            <option value="Construction-linked">Construction-linked</option>
+            <option value="Time-linked">Time-linked</option>
+            <option value="Subvention">Subvention</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-grid-divider"></div>
+
+      <div class="field">
+        <div class="field-label">Loan %</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="loanPct_A" value="80">
+          <span class="input-suffix">%</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Interest Rate</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="interestRate_A" value="9">
+          <span class="input-suffix">% p.a.</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Rental Yield</div>
+        <div class="input-wrap with-prefix with-suffix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="rentalYield_A" value="20">
+          <span class="input-suffix">/sft/mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Rental Growth</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="rentalGrowth_A" value="5">
+          <span class="input-suffix">% /yr</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Maintenance</div>
+        <div class="input-wrap with-prefix with-suffix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="maintenancePSF_A" value="4">
+          <span class="input-suffix">/sft/mo</span>
+        </div>
+      </div>
+      <div class="toggle-group">
+        <label class="toggle">
+          <input type="checkbox" id="gst_A">
+          <div class="toggle-switch"></div>
+          <span class="toggle-label">GST 5%</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="stampDutyApplicable_A" checked>
+          <div class="toggle-switch"></div>
+          <span class="toggle-label">Stamp Duty 7.5%</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project B -->
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-badge b">B</div>
+      <input type="text" class="project-name-input" id="name_B" placeholder="Project B name" value="Ready-to-Move Project">
+      <span class="segment-chip" id="segment_B"></span>
+    </div>
+
+    <div class="luxury-input-wrap">
+      <div class="field" style="margin: 0;">
+        <div class="field-label">Luxury Index™ (Required)</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="luxuryIndex_B" placeholder="e.g., 52" oninput="updateLuxuryBar()">
+          <span class="input-suffix">/ 100</span>
+        </div>
+        <div class="field-hint">From SafeNest Schema · 0-100 scale</div>
+      </div>
+    </div>
+
+    <div class="input-grid">
+      <div class="field">
+        <div class="field-label">Size</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="size_B" value="1250">
+          <span class="input-suffix">sft</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Base Price</div>
+        <div class="input-wrap with-prefix with-suffix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="psf_B">
+          <span class="input-suffix">/sft</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Handover</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="handoverMonths_B" value="0">
+          <span class="input-suffix">months</span>
+        </div>
+        <div class="field-hint">0 = ready to move</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Payment Plan</div>
+        <div class="select-wrap">
+          <select id="paymentPlan_B">
+            <option value="Construction-linked">Construction-linked</option>
+            <option value="Time-linked">Time-linked</option>
+            <option value="Subvention">Subvention</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-grid-divider"></div>
+
+      <div class="field">
+        <div class="field-label">Loan %</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="loanPct_B" value="80">
+          <span class="input-suffix">%</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Interest Rate</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="interestRate_B" value="9">
+          <span class="input-suffix">% p.a.</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Rental Yield</div>
+        <div class="input-wrap with-prefix with-suffix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="rentalYield_B" value="20">
+          <span class="input-suffix">/sft/mo</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Rental Growth</div>
+        <div class="input-wrap with-suffix">
+          <input type="number" id="rentalGrowth_B" value="5">
+          <span class="input-suffix">% /yr</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Maintenance</div>
+        <div class="input-wrap with-prefix with-suffix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="maintenancePSF_B" value="4">
+          <span class="input-suffix">/sft/mo</span>
+        </div>
+      </div>
+      <div class="toggle-group">
+        <label class="toggle">
+          <input type="checkbox" id="gst_B">
+          <div class="toggle-switch"></div>
+          <span class="toggle-label">GST 5%</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="stampDutyApplicable_B" checked>
+          <div class="toggle-switch"></div>
+          <span class="toggle-label">Stamp Duty 7.5%</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculate Button -->
+  <button class="calculate-btn" id="calc-btn" onclick="calculate()">Calculate True Cost →</button>
+
+  <!-- Results -->
+  <div id="results">
+    <div id="segment-warning"></div>
+    <div id="norm-toggle-wrap"></div>
+    <div id="winner-banner-wrap"></div>
+    <div id="result-A-wrap"></div>
+    <div id="result-B-wrap"></div>
+    <div class="disclaimer">
+      <strong>Disclaimer:</strong> Indicative estimates for advisory comparison only. Actual costs depend on bank sanction terms, builder payment schedules, GST applicability, and prevailing stamp duty rates. Telangana stamp duty applied at 7.5% (5.5% stamp + 1.5% transfer + 0.5% registration). Luxury Index™ normalization is SafeNest's proprietary quality-adjustment methodology, capped at ±15%. Capital appreciation excluded — assumed equal across same-segment projects in same micro-market. Title verification is the buyer's responsibility through independent legal counsel.
+    </div>
+  </div>
+</div>
+
+<!-- Methodology Panel -->
+<div class="panel" id="panel-methodology">
+  <p class="panel-intro">What this calculator accounts for.</p>
+
+  <div class="method-card">
+    <h4>1. Stage-wise Pre-EMI Interest</h4>
+    <p>Banks disburse home loans in stages — not all at once. Construction-linked plans use an 8-stage curve (10% booking → 100% possession). Time-linked plans use a 7-stage curve. Interest is computed monthly on the cumulative disbursed balance at each stage. For Subvention schemes, pre-EMI is zero — but the calculator expects you to input the inflated PSF (typically 8-12% higher) so the true economics still surface.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>2. GST Differential (5%)</h4>
+    <p>Under-construction properties attract 5% GST without input tax credit. OC-received properties are GST-exempt. On a ₹1 Cr property, that's a ₹5L difference straight to acquisition cost.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>3. Telangana Stamp Duty (7.5%)</h4>
+    <p>Telangana charges 5.5% stamp duty + 1.5% transfer duty + 0.5% registration fee = 7.5% total. Applied to base agreement value at booking.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>4. Rental Income — Gained or Foregone</h4>
+    <p>A ready-to-move buyer earns rent from month 1. An under-construction buyer earns nothing until possession. Computed month-by-month with annual compounding (default 5%) over 48 months. Often the single largest hidden cost — ₹10-15L on a typical comparison.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>5. Maintenance Charges Post-Possession</h4>
+    <p>Monthly maintenance (₹3-5/sft) begins at possession. Ready-to-move buyers pay 48 months. Buyers waiting 36 months pay only 12. Partially offsets the rental advantage.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>6. Luxury Index™ Normalization (Proprietary)</h4>
+    <p>SafeNest's proprietary Luxury Index (0-100) measures construction quality, density, amenities, spatial design, and infrastructure. When two projects have different scores, the calculator adjusts the lower-quality project's price upward to enable like-to-like comparison. Adjustment is linear, capped at ±15%. Cross-segment comparisons trigger amber (1 band) or red (2+ bands) warnings.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>7. True Cost Per Square Foot</h4>
+    <p>Final output converts everything back to a per-sft number. When ₹7,000 quoted becomes ₹9,200 true and ₹9,000 quoted becomes ₹8,400 true, the conversation changes.</p>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ═══ CONSTANTS ═══
+const STAMP_DUTY_PCT = 0.075;
+const NORMALIZATION_CAP = 0.15;
+
+const SEGMENTS = [
+  { name: "Standard", min: 0, max: 45, color: "#9CA3AF", band: 0 },
+  { name: "Premium", min: 46, max: 70, color: "#60A5FA", band: 1 },
+  { name: "Luxury", min: 71, max: 85, color: "#C9A84C", band: 2 },
+  { name: "Ultra Luxury", min: 86, max: 100, color: "#A78BFA", band: 3 },
+];
+
+const CURVES = {
+  "Construction-linked": [0.10, 0.20, 0.30, 0.50, 0.65, 0.80, 0.90, 1.00],
+  "Time-linked": [0.20, 0.35, 0.50, 0.65, 0.80, 0.90, 1.00],
+  "Subvention": [0.0]
+};
+
+// ═══ CALCULATION ENGINE ═══
+function calcPreEmiInterest(loanAmtCr, annualRate, handoverMonths, planType) {
+  if (planType === "Subvention" || handoverMonths <= 0) return 0;
+  const curve = CURVES[planType] || CURVES["Construction-linked"];
+  const stages = curve.length;
+  const intervalMonths = handoverMonths / stages;
+  const monthlyRate = annualRate / 12;
+  let totalInterest = 0;
+  let prevPct = 0;
+  for (let i = 0; i < stages; i++) {
+    const currentPct = curve[i];
+    const avgDisbursedThisStage = ((prevPct + currentPct) / 2) * loanAmtCr;
+    totalInterest += avgDisbursedThisStage * monthlyRate * intervalMonths;
+    prevPct = currentPct;
+  }
+  return totalInterest;
+}
+
+function calcRentalIncome(sizeSft, rentalPSF, annualGrowth, handoverMonths, horizonMonths = 48) {
+  if (rentalPSF <= 0) return 0;
+  let total = 0;
+  let currentMonthlyRental = rentalPSF * sizeSft;
+  for (let m = 0; m < horizonMonths; m++) {
+    if (m >= handoverMonths) total += currentMonthlyRental;
+    if ((m + 1) % 12 === 0) currentMonthlyRental *= 1 + annualGrowth;
+  }
+  return total / 1e7;
+}
+
+function calcMaintenance(sizeSft, maintenancePSF, handoverMonths) {
+  const monthlyMaintenance = (maintenancePSF * sizeSft) / 1e7;
+  const postPossessionMonths = Math.max(0, 48 - handoverMonths);
+  return monthlyMaintenance * postPossessionMonths;
+}
+
+function getSegment(index) {
+  const i = parseFloat(index) || 0;
+  return SEGMENTS.find(s => i >= s.min && i <= s.max) || SEGMENTS[0];
+}
+
+function calculateNormalization(indexA, indexB) {
+  const iA = parseFloat(indexA) || 0;
+  const iB = parseFloat(indexB) || 0;
+  if (iA === 0 || iB === 0) return null;
+  const segA = getSegment(iA);
+  const segB = getSegment(iB);
+  const bandsCrossed = Math.abs(segA.band - segB.band);
+  const lowerIsA = iA < iB;
+  const higherIndex = Math.max(iA, iB);
+  const lowerIndex = Math.min(iA, iB);
+  const rawGapPct = (higherIndex - lowerIndex) / lowerIndex;
+  const cappedGapPct = Math.min(rawGapPct, NORMALIZATION_CAP);
+  const isCapped = rawGapPct > NORMALIZATION_CAP;
+  let warningTier = "none";
+  if (bandsCrossed >= 2) warningTier = "red";
+  else if (bandsCrossed === 1) warningTier = "amber";
+  return {
+    rawGapPct, appliedAdjustment: cappedGapPct, isCapped,
+    bandsCrossed, warningTier, lowerIsA, segA, segB, indexA: iA, indexB: iB
+  };
+}
+
+function getInputs(id) {
+  return {
+    id,
+    name: document.getElementById(`name_${id}`).value,
+    luxuryIndex: document.getElementById(`luxuryIndex_${id}`).value,
+    size: document.getElementById(`size_${id}`).value,
+    psf: document.getElementById(`psf_${id}`).value,
+    handoverMonths: document.getElementById(`handoverMonths_${id}`).value,
+    paymentPlan: document.getElementById(`paymentPlan_${id}`).value,
+    loanPct: document.getElementById(`loanPct_${id}`).value,
+    interestRate: document.getElementById(`interestRate_${id}`).value,
+    rentalYield: document.getElementById(`rentalYield_${id}`).value,
+    rentalGrowth: document.getElementById(`rentalGrowth_${id}`).value,
+    maintenancePSF: document.getElementById(`maintenancePSF_${id}`).value,
+    gst: document.getElementById(`gst_${id}`).checked,
+    stampDutyApplicable: document.getElementById(`stampDutyApplicable_${id}`).checked,
+  };
+}
+
+function calculateProject(inputs, psfOverride) {
+  const size = parseFloat(inputs.size) || 0;
+  const psf = psfOverride !== undefined ? psfOverride : (parseFloat(inputs.psf) || 0);
+  const months = parseFloat(inputs.handoverMonths) || 0;
+  const gstRate = inputs.gst ? 0.05 : 0;
+  const loanPct = parseFloat(inputs.loanPct) / 100;
+  const rate = parseFloat(inputs.interestRate) / 100;
+  const rental = parseFloat(inputs.rentalYield) || 0;
+  const growth = parseFloat(inputs.rentalGrowth) / 100;
+  const maintPSF = parseFloat(inputs.maintenancePSF) || 0;
+
+  const baseCostL = (size * psf) / 1e5;
+  const gstAmountL = baseCostL * gstRate;
+  const totalAcquisitionL = baseCostL + gstAmountL;
+  const stampDutyL = inputs.stampDutyApplicable ? baseCostL * STAMP_DUTY_PCT : 0;
+  const loanAmtCr = (totalAcquisitionL * loanPct) / 100;
+  const preEmiL = calcPreEmiInterest(loanAmtCr, rate, months, inputs.paymentPlan) * 100;
+  const maintenanceL = calcMaintenance(size, maintPSF, months) * 100;
+  const rentalIncomeL = calcRentalIncome(size, rental, growth, months) * 100;
+  const totalCostL = totalAcquisitionL + stampDutyL + preEmiL + maintenanceL;
+  const trueCostL = totalCostL - rentalIncomeL;
+  const truePSF = size > 0 ? (trueCostL * 1e5) / size : 0;
+
+  return {
+    inputPSF: psf, size, months, planType: inputs.paymentPlan,
+    baseCostL, gstAmountL, totalAcquisitionL, stampDutyL,
+    preEmiL, maintenanceL, rentalIncomeL, totalCostL, trueCostL, truePSF,
+  };
+}
+
+// ═══ STATE ═══
+let currentResults = null;
+let showNormalized = false;
+
+// ═══ UI UPDATES ═══
+function showPanel(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+}
+
+function updateLuxuryBar() {
+  ['A', 'B'].forEach(id => {
+    const val = parseFloat(document.getElementById(`luxuryIndex_${id}`).value) || 0;
+    const marker = document.getElementById(`lux-marker-${id}`);
+    const chip = document.getElementById(`lux-chip-${id}`);
+    const segChip = document.getElementById(`segment_${id}`);
+
+    if (val > 0 && val <= 100) {
+      marker.style.display = 'block';
+      marker.style.left = `${val}%`;
+      marker.querySelector('.lux-marker-label').textContent = `${id} · ${val}`;
+
+      const seg = getSegment(val);
+      chip.style.display = 'inline-block';
+      chip.textContent = seg.name;
+      chip.style.color = seg.color;
+      chip.style.borderColor = seg.color + '66';
+      chip.style.background = seg.color + '22';
+
+      segChip.style.display = 'inline-block';
+      segChip.textContent = seg.name;
+      segChip.style.color = seg.color;
+      segChip.style.borderColor = seg.color + '66';
+      segChip.style.background = seg.color + '22';
+    } else {
+      marker.style.display = 'none';
+      chip.style.display = 'none';
+      segChip.style.display = 'none';
+    }
+  });
+}
+
+function validateInputs() {
+  const a = getInputs('A');
+  const b = getInputs('B');
+  const valid = parseFloat(a.size) > 0 && parseFloat(a.psf) > 0 && parseFloat(a.luxuryIndex) > 0
+             && parseFloat(b.size) > 0 && parseFloat(b.psf) > 0 && parseFloat(b.luxuryIndex) > 0;
+  const btn = document.getElementById('calc-btn');
+  btn.disabled = !valid;
+  btn.textContent = valid ? 'Calculate True Cost →' : 'Enter Luxury Index, size & PSF for both';
+}
+
+// ═══ CALCULATE ═══
+function calculate() {
+  const inputsA = getInputs('A');
+  const inputsB = getInputs('B');
+
+  const rawA = calculateProject(inputsA);
+  const rawB = calculateProject(inputsB);
+
+  const norm = calculateNormalization(inputsA.luxuryIndex, inputsB.luxuryIndex);
+
+  let normalizedA = null, normalizedB = null;
+  if (norm && norm.appliedAdjustment > 0) {
+    const adjustedPsfA = norm.lowerIsA
+      ? parseFloat(inputsA.psf) * (1 + norm.appliedAdjustment)
+      : parseFloat(inputsA.psf);
+    const adjustedPsfB = !norm.lowerIsA
+      ? parseFloat(inputsB.psf) * (1 + norm.appliedAdjustment)
+      : parseFloat(inputsB.psf);
+    normalizedA = calculateProject(inputsA, adjustedPsfA);
+    normalizedB = calculateProject(inputsB, adjustedPsfB);
+  }
+
+  currentResults = {
+    raw: [
+      { ...rawA, id: 'A', name: inputsA.name || 'Project A' },
+      { ...rawB, id: 'B', name: inputsB.name || 'Project B' }
+    ],
+    normalized: (normalizedA && normalizedB) ? [
+      { ...normalizedA, id: 'A', name: inputsA.name || 'Project A' },
+      { ...normalizedB, id: 'B', name: inputsB.name || 'Project B' }
+    ] : null,
+    normalization: norm
+  };
+
+  showNormalized = false;
+  renderResults();
+  document.getElementById('results').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ═══ RENDER RESULTS ═══
+function setNormalized(val) {
+  showNormalized = val;
+  renderResults();
+}
+
+function renderResults() {
+  if (!currentResults) return;
+  const results = (showNormalized && currentResults.normalized) ? currentResults.normalized : currentResults.raw;
+
+  // Winner
+  const winner = results[0].trueCostL < results[1].trueCostL ? 0 : 1;
+  const savingL = Math.abs(results[0].trueCostL - results[1].trueCostL);
+  const savingPct = ((savingL / results[winner === 0 ? 1 : 0].trueCostL) * 100).toFixed(1);
+
+  // Segment warning
+  const warningEl = document.getElementById('segment-warning');
+  const norm = currentResults.normalization;
+  if (norm && norm.warningTier !== 'none') {
+    const isRed = norm.warningTier === 'red';
+    warningEl.innerHTML = `
+      <div class="warning ${isRed ? 'red' : 'amber'}">
+        <div class="warning-header">
+          <span>${isRed ? '⚠' : '⚡'}</span>
+          <span>${isRed ? 'Cross-Segment Comparison' : 'Quality Gap Detected'}</span>
+        </div>
+        <p>${isRed
+          ? `These projects are in fundamentally different buying decisions — ${norm.bandsCrossed} segment bands apart. Even with quality adjustment, this comparison is indicative only. Consider whether the buyer should evaluate both.`
+          : `Projects are in adjacent segments. SafeNest has applied a Luxury Index adjustment to enable like-to-like comparison.`}
+        </p>
+      </div>
+    `;
+  } else {
+    warningEl.innerHTML = '';
+  }
+
+  // Normalization toggle
+  const toggleEl = document.getElementById('norm-toggle-wrap');
+  if (currentResults.normalized && norm && norm.appliedAdjustment > 0) {
+    toggleEl.innerHTML = `
+      <div class="norm-toggle">
+        <button onclick="setNormalized(false)" class="${!showNormalized ? 'active' : ''}">Raw Comparison</button>
+        <button onclick="setNormalized(true)" class="${showNormalized ? 'active' : ''}">Quality-Adjusted</button>
+      </div>
+      ${showNormalized ? `
+        <div class="norm-explanation">
+          <div class="norm-explanation-label">Luxury Index™ Adjustment Applied</div>
+          <p>
+            Project ${norm.lowerIsA ? 'A' : 'B'} (Luxury Index ${norm.lowerIsA ? norm.indexA : norm.indexB}) priced upward by
+            <strong>${(norm.appliedAdjustment * 100).toFixed(1)}%</strong>
+            to match Project ${norm.lowerIsA ? 'B' : 'A'}'s quality (Luxury Index ${norm.lowerIsA ? norm.indexB : norm.indexA}).
+            ${norm.isCapped ? `<span class="norm-capped">⚡ Raw quality gap was ${(norm.rawGapPct * 100).toFixed(1)}% — capped at 15% for credibility.</span>` : ''}
+          </p>
+        </div>
+      ` : ''}
+    `;
+  } else {
+    toggleEl.innerHTML = '';
+  }
+
+  // Winner banner
+  document.getElementById('winner-banner-wrap').innerHTML = `
+    <div class="winner-banner">
+      <div class="winner-label">${showNormalized ? 'Quality-Adjusted' : 'Raw'} 4-Year True Cost Winner</div>
+      <div class="winner-title">${results[winner].name}</div>
+      <div class="winner-saving">Saves ₹${savingL.toFixed(1)}L (${savingPct}% less)</div>
+      <div class="winner-psf">True PSF: ₹${Math.round(results[winner].truePSF).toLocaleString('en-IN')} vs ₹${Math.round(results[winner === 0 ? 1 : 0].truePSF).toLocaleString('en-IN')}</div>
+    </div>
+  `;
+
+  // Result cards
+  document.getElementById('result-A-wrap').innerHTML = renderResultCard(results[0], winner === 0);
+  document.getElementById('result-B-wrap').innerHTML = renderResultCard(results[1], winner === 1);
+}
+
+function renderResultCard(r, isWinner) {
+  const psfLabel = showNormalized ? 'Adjusted' : 'Quoted';
+  return `
+    <div class="result-card ${isWinner ? 'winner' : ''}">
+      <div class="result-header">
+        <div class="result-id">
+          <div class="result-badge ${r.id === 'A' ? 'a' : 'b'}">${r.id}</div>
+          <span class="result-name">${r.name}</span>
+        </div>
+        ${isWinner ? '<span class="winner-tag">✓ Lower</span>' : ''}
+      </div>
+      <div class="psf-block">
+        <div class="psf-item">
+          <div class="psf-label">${psfLabel} PSF</div>
+          <div class="psf-value">₹${Math.round(r.inputPSF).toLocaleString('en-IN')}</div>
+        </div>
+        <div class="psf-divider"></div>
+        <div class="psf-item">
+          <div class="psf-label highlight">True PSF</div>
+          <div class="psf-value highlight">₹${Math.round(r.truePSF).toLocaleString('en-IN')}</div>
+        </div>
+      </div>
+      <div class="line">
+        <div class="line-label-group">
+          <span class="line-label">Base Cost</span>
+          <span class="line-hint">${r.size} sft × ₹${Math.round(r.inputPSF)}/sft</span>
+        </div>
+        <span class="line-value">₹${r.baseCostL.toFixed(2)}L</span>
+      </div>
+      ${r.gstAmountL > 0 ? `<div class="line add"><span class="line-label">GST (5%)</span><span class="line-value">₹${r.gstAmountL.toFixed(2)}L</span></div>` : ''}
+      <div class="line bold"><span class="line-label">Acquisition Cost</span><span class="line-value">₹${r.totalAcquisitionL.toFixed(2)}L</span></div>
+      ${r.stampDutyL > 0 ? `<div class="line add"><span class="line-label">Stamp Duty & Reg (7.5%)</span><span class="line-value">₹${r.stampDutyL.toFixed(2)}L</span></div>` : ''}
+      ${r.preEmiL > 0 ? `<div class="line add">
+        <div class="line-label-group">
+          <span class="line-label">Pre-EMI Interest</span>
+          <span class="line-hint">${r.planType} · ${r.months} months</span>
+        </div>
+        <span class="line-value">₹${r.preEmiL.toFixed(2)}L</span>
+      </div>` : ''}
+      ${r.maintenanceL > 0 ? `<div class="line add">
+        <div class="line-label-group">
+          <span class="line-label">Maintenance</span>
+          <span class="line-hint">${Math.max(0, 48 - r.months)} months post-possession</span>
+        </div>
+        <span class="line-value">₹${r.maintenanceL.toFixed(2)}L</span>
+      </div>` : ''}
+      <div class="line bold"><span class="line-label">Total Cost (4 years)</span><span class="line-value">₹${r.totalCostL.toFixed(2)}L</span></div>
+      ${r.rentalIncomeL > 0 ? `<div class="line sub">
+        <div class="line-label-group">
+          <span class="line-label">Rental Income</span>
+          <span class="line-hint">${Math.max(0, 48 - r.months)} months earned</span>
+        </div>
+        <span class="line-value">₹${r.rentalIncomeL.toFixed(2)}L</span>
+      </div>` : ''}
+      <div class="net ${isWinner ? 'winner' : ''}">
+        <div class="net-label">NET TRUE COST</div>
+        <div class="net-value">₹${r.trueCostL.toFixed(1)}L</div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══ INIT ═══
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', validateInputs);
+  el.addEventListener('change', validateInputs);
+});
+validateInputs();
+updateLuxuryBar();
+</script>
+</body>
+</html>
