@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeNest Advisor Training Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#1B2A4A; --navy2:#0F1A2E; --navy3:#2D4068;
+    --gold:#C9A84C; --gold2:#E2C97B; --goldp:#F5EDD4; --goldb:#8A6520;
+    --cream:#F9F7F4; --cream2:#EDE9E1; --white:#FFFFFF; --border:#DDD8CE;
+    --charcoal:#1A1A1A; --slate:#4A5568; --muted:#8892A4;
+    --forest:#2E7D52; --forestp:#E6F4EC; --forestb:#1A5A35;
+    --amber:#D4860A; --amberp:#FEF3DC; --amberb:#7A4500;
+    --red:#B03020; --redp:#FDECEA;
+    --sidebar-w: 270px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  #sidebar {
+    position: fixed; top: 0; left: 0; width: var(--sidebar-w);
+    height: 100vh; background: var(--navy2); overflow-y: auto;
+    display: flex; flex-direction: column; z-index: 100;
+  }
+  .sidebar-brand {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+  }
+  .sidebar-brand .logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--gold); font-weight: 600; letter-spacing: 0.5px; }
+  .sidebar-brand .sub { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .sidebar-badge { background: var(--gold); color: var(--navy2); font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; margin-top: 8px; display: inline-block; }
+
+  .nav-section { padding: 14px 0 4px 20px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(201,168,76,0.5); font-weight: 600; }
+  .nav-link {
+    display: block; padding: 8px 20px; font-size: 12.5px; color: rgba(255,255,255,0.55);
+    text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent;
+    line-height: 1.4;
+  }
+  .nav-link:hover { color: var(--gold2); background: rgba(201,168,76,0.06); border-left-color: rgba(201,168,76,0.3); }
+  .nav-link.active { color: var(--gold); border-left-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .nav-link .num { font-family: 'Cormorant Garamond', serif; font-size: 10px; color: var(--muted); margin-right: 6px; }
+
+  /* MAIN */
+  #main { margin-left: var(--sidebar-w); flex: 1; padding: 0; }
+
+  /* HERO */
+  .hero {
+    background: var(--navy2); padding: 60px 60px 50px;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--white); line-height: 1.1; font-weight: 400; margin-bottom: 12px; }
+  .hero-title em { color: var(--gold); font-style: italic; }
+  .hero-sub { font-size: 15px; color: rgba(255,255,255,0.5); max-width: 520px; line-height: 1.7; }
+  .hero-meta { display: flex; gap: 32px; margin-top: 32px; }
+  .hero-meta-item { text-align: left; }
+  .hero-meta-item .val { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--gold); }
+  .hero-meta-item .lbl { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+
+  /* CONTENT */
+  .content { padding: 52px 60px; max-width: 900px; }
+  .section { margin-bottom: 60px; scroll-margin-top: 24px; }
+
+  /* SECTION HEADERS */
+  .sec-num { font-family: 'Cormorant Garamond', serif; font-size: 11px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .sec-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--navy); font-weight: 600; margin-bottom: 8px; line-height: 1.2; }
+  .sec-intro { font-size: 15px; color: var(--slate); line-height: 1.75; margin-bottom: 24px; max-width: 700px; }
+  .divider { height: 1px; background: var(--border); margin-bottom: 28px; }
+
+  /* CARDS */
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 24px 28px; margin-bottom: 16px; }
+  .card-gold { border-left: 3px solid var(--gold); }
+  .card-green { border-left: 3px solid var(--forest); }
+  .card-amber { border-left: 3px solid var(--amber); }
+  .card-red { border-left: 3px solid var(--red); }
+  .card h4 { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--navy); margin-bottom: 8px; }
+  .card p, .card li { font-size: 14px; color: var(--slate); line-height: 1.75; }
+  .card ul { padding-left: 18px; }
+  .card ul li { margin-bottom: 5px; }
+
+  /* ANALOGY BOXES */
+  .analogy {
+    background: var(--goldp); border: 1px solid #e8d9a8; border-radius: 4px;
+    padding: 16px 20px; margin: 16px 0; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .analogy .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .analogy p { font-size: 13.5px; color: var(--goldb); line-height: 1.65; }
+  .analogy strong { color: var(--goldb); }
+
+  /* SCORE TABLE */
+  .score-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .score-table th { background: var(--navy); color: var(--gold); font-weight: 500; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+  .score-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--slate); vertical-align: top; }
+  .score-table tr:last-child td { border-bottom: none; }
+  .score-table tr:hover td { background: var(--cream); }
+  .score-table .bold { font-weight: 600; color: var(--charcoal); }
+
+  /* VERDICT BANDS */
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .verdict-card { border-radius: 4px; padding: 16px 18px; }
+  .verdict-hf { background: var(--forestp); border: 1px solid #b8dfc9; }
+  .verdict-f { background: #EBF4FF; border: 1px solid #b8d4f0; }
+  .verdict-c { background: var(--amberp); border: 1px solid #f5d898; }
+  .verdict-u { background: var(--redp); border: 1px solid #f5c0b8; }
+  .verdict-card .label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .verdict-hf .label { color: var(--forestb); }
+  .verdict-f .label { color: #1a4a7a; }
+  .verdict-c .label { color: var(--amberb); }
+  .verdict-u .label { color: var(--red); }
+  .verdict-card .range { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .verdict-card .desc { font-size: 12.5px; color: var(--slate); line-height: 1.6; }
+
+  /* PILLAR VISUAL */
+  .pillars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+  .pillar-bar { text-align: center; }
+  .pillar-bar .bar-wrap { height: 80px; background: var(--cream2); border-radius: 3px; display: flex; align-items: flex-end; overflow: hidden; }
+  .pillar-bar .bar-fill { width: 100%; border-radius: 3px 3px 0 0; transition: height 0.8s ease; }
+  .pillar-bar .p-name { font-size: 10px; color: var(--muted); margin-top: 6px; text-align: center; letter-spacing: 0.5px; }
+  .pillar-bar .p-score { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--navy); font-weight: 600; }
+  .pillar-bar .p-max { font-size: 10px; color: var(--muted); }
+
+  /* SCRIPT BOXES */
+  .script-box { background: var(--navy2); border-radius: 4px; padding: 20px 24px; margin: 16px 0; }
+  .script-box .script-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .script-box p { font-size: 13.5px; color: rgba(255,255,255,0.75); line-height: 1.75; font-style: italic; }
+
+  /* STEP LIST */
+  .steps { list-style: none; padding: 0; }
+  .steps li { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .steps li:last-child { border-bottom: none; }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold); font-weight: 600; flex-shrink: 0; width: 32px; line-height: 1; }
+  .step-body h5 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+  .step-body p { font-size: 13px; color: var(--slate); line-height: 1.65; }
+  .step-time { font-size: 10px; background: var(--goldp); color: var(--goldb); padding: 2px 8px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+
+  /* DO/DONT */
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .do-col, .dont-col { border-radius: 4px; padding: 18px 20px; }
+  .do-col { background: var(--forestp); border: 1px solid #b8dfc9; }
+  .dont-col { background: var(--redp); border: 1px solid #f5c0b8; }
+  .do-col h5 { color: var(--forestb); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .dont-col h5 { color: var(--red); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .do-col li, .dont-col li { font-size: 13px; color: var(--slate); margin-bottom: 6px; line-height: 1.5; }
+  .do-col ul, .dont-col ul { padding-left: 16px; }
+
+  /* HIGHLIGHT BOX */
+  .highlight { background: var(--navy); color: var(--white); border-radius: 4px; padding: 20px 24px; margin: 16px 0; }
+  .highlight h5 { color: var(--gold); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .highlight p, .highlight li { font-size: 13.5px; color: rgba(255,255,255,0.75); line-height: 1.7; }
+  .highlight ul { padding-left: 18px; }
+  .highlight li { margin-bottom: 5px; }
+
+  /* GLOSSARY */
+  .glossary-grid { display: grid; gap: 0; }
+  .glossary-item { display: grid; grid-template-columns: 200px 1fr; gap: 0; border-bottom: 1px solid var(--border); }
+  .glossary-item:last-child { border-bottom: none; }
+  .glossary-term { padding: 14px 20px 14px 0; font-weight: 600; font-size: 13.5px; color: var(--navy); }
+  .glossary-def { padding: 14px 0; font-size: 13.5px; color: var(--slate); line-height: 1.65; border-left: 1px solid var(--border); padding-left: 20px; }
+  .glossary-letter { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--gold); padding: 16px 0 4px; font-weight: 600; grid-column: 1/-1; }
+
+  /* QUICK REF */
+  .quick-ref { background: var(--navy2); border-radius: 4px; padding: 28px 32px; }
+  .quick-ref h4 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 20px; margin-bottom: 16px; }
+  .qr-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .qr-row:last-child { border-bottom: none; }
+  .qr-label { font-size: 12px; color: var(--muted); }
+  .qr-val { font-size: 13px; color: var(--white); font-weight: 500; }
+
+  /* BADGE */
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 2px; }
+  .badge-gold { background: var(--goldp); color: var(--goldb); }
+  .badge-green { background: var(--forestp); color: var(--forestb); }
+  .badge-amber { background: var(--amberp); color: var(--amberb); }
+  .badge-red { background: var(--redp); color: var(--red); }
+  .badge-navy { background: rgba(27,42,74,0.1); color: var(--navy); }
+
+  /* TAG */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+  /* RULES */
+  .rule-list { list-style: none; padding: 0; }
+  .rule-list li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; color: var(--slate); line-height: 1.6; display: flex; gap: 10px; }
+  .rule-list li:last-child { border-bottom: none; }
+  .rule-list li::before { content: "—"; color: var(--gold); flex-shrink: 0; font-weight: 600; }
+
+  /* SECTION DIVIDER */
+  .section-divider { border: none; border-top: 2px solid var(--navy); margin: 48px 0 40px; opacity: 0.08; }
+
+  /* WEIGHT BAR */
+  .weight-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .weight-row:last-child { border-bottom: none; }
+  .weight-label { font-size: 13px; color: var(--charcoal); width: 200px; flex-shrink: 0; }
+  .weight-bar-bg { flex: 1; height: 8px; background: var(--cream2); border-radius: 4px; overflow: hidden; }
+  .weight-bar-fill { height: 100%; background: var(--gold); border-radius: 4px; }
+  .weight-pct { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--navy); font-weight: 600; width: 40px; text-align: right; }
+
+  /* SAMPLE DATA */
+  .sample-header { background: var(--goldp); border: 1px solid #e8d9a8; border-radius: 4px 4px 0 0; padding: 10px 18px; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--goldb); font-weight: 600; }
+  .sample-body { background: var(--white); border: 1px solid var(--border); border-top: none; border-radius: 0 0 4px 4px; padding: 20px 18px; }
+
+  /* WARN BOX */
+  .warn-box { background: var(--amberp); border: 1px solid #f5d898; border-left: 3px solid var(--amber); border-radius: 4px; padding: 14px 18px; margin: 12px 0; }
+  .warn-box p { font-size: 13.5px; color: var(--amberb); line-height: 1.65; }
+
+  /* NEVER BOX */
+  .never-box { background: var(--redp); border: 1px solid #f5c0b8; border-left: 3px solid var(--red); border-radius: 4px; padding: 14px 18px; margin: 12px 0; }
+  .never-box p { font-size: 13.5px; color: var(--red); line-height: 1.65; font-weight: 500; }
+
+  /* GRID 2 */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    #sidebar{display:none}
+    #main{margin-left:0}
+    .hero, .content{padding:32px 24px}
+    .pillars{grid-template-columns:repeat(3,1fr)}
+    .verdict-grid, .do-dont, .grid-2{grid-template-columns:1fr}
+    .glossary-item{grid-template-columns:1fr; display:block}
+    .glossary-term{padding-bottom:2px}
+    .glossary-def{border-left:none; padding-left:0; padding-top:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">SafeNest Advisory</div>
+    <div class="sub">Advisor Training Guide</div>
+    <div class="sidebar-badge">D3 Report · Plain English</div>
+  </div>
+
+  <div class="nav-section">Getting Started</div>
+  <a class="nav-link active" href="#s1" onclick="scrollTo('s1')"><span class="num">01</span>What Is the D3 Report?</a>
+  <a class="nav-link" href="#s2" onclick="scrollTo('s2')"><span class="num">02</span>Your Job as an Advisor</a>
+  <a class="nav-link" href="#s3" onclick="scrollTo('s3')"><span class="num">03</span>What's Inside a D3?</a>
+
+  <div class="nav-section">Scoring</div>
+  <a class="nav-link" href="#s4" onclick="scrollTo('s4')"><span class="num">04</span>The SafeNest Score™</a>
+  <a class="nav-link" href="#s5" onclick="scrollTo('s5')"><span class="num">05</span>The Luxury Index™</a>
+  <a class="nav-link" href="#s6" onclick="scrollTo('s6')"><span class="num">06</span>The Risk Score</a>
+
+  <div class="nav-section">The Report Sections</div>
+  <a class="nav-link" href="#s7" onclick="scrollTo('s7')"><span class="num">07</span>Section-by-Section Guide</a>
+  <a class="nav-link" href="#s8" onclick="scrollTo('s8')"><span class="num">08</span>Watch Items Explained</a>
+  <a class="nav-link" href="#s9" onclick="scrollTo('s9')"><span class="num">09</span>Suitability Table</a>
+
+  <div class="nav-section">In the Meeting</div>
+  <a class="nav-link" href="#s10" onclick="scrollTo('s10')"><span class="num">10</span>Hard Questions & Scripts</a>
+  <a class="nav-link" href="#s11" onclick="scrollTo('s11')"><span class="num">11</span>What You Can & Can't Share</a>
+  <a class="nav-link" href="#s12" onclick="scrollTo('s12')"><span class="num">12</span>The 9-Step Meeting Flow</a>
+
+  <div class="nav-section">Reference</div>
+  <a class="nav-link" href="#s13" onclick="scrollTo('s13')"><span class="num">13</span>Vian Mrida Quick Reference</a>
+  <a class="nav-link" href="#s14" onclick="scrollTo('s14')"><span class="num">14</span>Non-Negotiable Rules</a>
+  <a class="nav-link" href="#glossary" onclick="scrollTo('glossary')"><span class="num">★</span>Glossary of Terms</a>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">SafeNest Advisory · Advisor Training Guide</div>
+    <h1 class="hero-title">The D3 Report<br><em>In Plain English</em></h1>
+    <p class="hero-sub">Everything you need to know about reading, presenting, and explaining the D3 Deep Research Report — written so simply a 10-year-old could understand it.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="val">14</div><div class="lbl">Sections</div></div>
+      <div class="hero-meta-item"><div class="val">40+</div><div class="lbl">Terms Defined</div></div>
+      <div class="hero-meta-item"><div class="val">v2.7</div><div class="lbl">Schema Version</div></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- S1: What is the D3 -->
+    <div class="section" id="s1">
+      <div class="sec-num">Section 01</div>
+      <h2 class="sec-title">What Is the D3 Report?</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Before you can explain the D3 to a buyer, you need to understand it yourself. Think of it like this:</p>
+
+      <div class="analogy">
+        <div class="icon">🏥</div>
+        <p><strong>Imagine you're going to buy a second-hand car.</strong> A normal person just looks at the paint and takes a test drive. But a smart buyer takes it to a mechanic first — the mechanic checks the engine, the brakes, the electrical system, everything. The mechanic gives you a written report. That report is the D3.</p>
+      </div>
+
+      <div class="card card-gold">
+        <h4>The D3 is SafeNest's "mechanic report" for a home.</h4>
+        <p>It checks the project from every angle — the builder's track record, the legal papers, how far construction has reached, how good the flat itself is, and much more. Then it gives the buyer a clear, honest picture so they can decide with confidence.</p>
+      </div>
+
+      <p style="font-size:14px;color:var(--slate);line-height:1.75;margin-top:16px;">The D3 is a <strong>paid report (₹4,999)</strong> or given free when a buyer books an advisory session. It is delivered via WhatsApp as a link. Buyers read it on their phone. It is never printed. It is never emailed as a file.</p>
+
+      <div class="do-dont">
+        <div class="do-col">
+          <h5>✓ The D3 IS</h5>
+          <ul>
+            <li>A deep research report on one specific project</li>
+            <li>Honest — it shows good and bad</li>
+            <li>Based on real documents and site visits</li>
+            <li>Written for the buyer (not the builder)</li>
+            <li>Your main tool in a buyer meeting</li>
+          </ul>
+        </div>
+        <div class="dont-col">
+          <h5>✗ The D3 is NOT</h5>
+          <ul>
+            <li>A brochure or marketing material</li>
+            <li>A guarantee that the project is safe</li>
+            <li>A comparison of multiple projects</li>
+            <li>Something a buyer creates themselves</li>
+            <li>Ever shared by the buyer — only by advisors</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: Your Job -->
+    <div class="section" id="s2">
+      <div class="sec-num">Section 02</div>
+      <h2 class="sec-title">Your Job as an Advisor</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">You are the guide. The D3 is the map. Your job is to walk the buyer through the map — not to push them in a direction.</p>
+
+      <div class="analogy">
+        <div class="icon">🧭</div>
+        <p><strong>Think of yourself as a doctor, not a salesperson.</strong> A good doctor tells the patient the truth — even if the news is not great. They explain what it means in simple words and help the patient decide what to do next. That's exactly your job with the D3.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card card-green">
+          <h4>You ARE paid by the builder</h4>
+          <p style="font-size:13.5px;color:var(--slate);line-height:1.7;">Yes, your commission comes from the developer. But — and this is important — you earn the <strong>same amount</strong> no matter which project the buyer picks. You have no reason to push one project over another. This is what makes SafeNest different.</p>
+        </div>
+        <div class="card card-gold">
+          <h4>You NEVER recommend blindly</h4>
+          <p style="font-size:13.5px;color:var(--slate);line-height:1.7;">You match the project to the buyer's life — their budget, timeline, whether they plan to live there or rent it out. You say "this project fits your profile because…" not "buy this one, it's the best."</p>
+        </div>
+      </div>
+
+      <div class="do-dont" style="margin-top:16px;">
+        <div class="do-col">
+          <h5>✓ Always do this</h5>
+          <ul>
+            <li>Read the full D3 before the meeting</li>
+            <li>Know the Watch Items by heart</li>
+            <li>Use the report as your guide — not your script</li>
+            <li>Let the buyer ask questions freely</li>
+            <li>Admit if you don't know something</li>
+          </ul>
+        </div>
+        <div class="dont-col">
+          <h5>✗ Never do this</h5>
+          <ul>
+            <li>Promise things not in the report</li>
+            <li>Dismiss a Watch Item as "not a big deal"</li>
+            <li>Share the D3 link with anyone else</li>
+            <li>Show the buyer the risk numbers (internal use only)</li>
+            <li>Push the buyer to decide on the spot</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3: Inside a D3 -->
+    <div class="section" id="s3">
+      <div class="sec-num">Section 03</div>
+      <h2 class="sec-title">What's Inside a D3?</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">The D3 has 9 main sections. Each one tells a different part of the story. Here's what each section is and why it matters.</p>
+
+      <ol class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h5>Vision Block — "Imagine your life here"</h5>
+            <p>Four sentences that paint a picture of daily life in this project. Not fake marketing language — real, honest description. Example: "Your morning commute to HITEC City takes 25 minutes." This helps the buyer <em>feel</em> the home before they analyse it.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h5>Basic Facts — "Here's what you're buying"</h5>
+            <p>Project name, builder name, RERA number, location, type of flat (2BHK, 3BHK, villa), flat sizes, number of floors, and expected handover date. The boring-but-important facts.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h5>Price & Payment Plan — "Here's what it costs, really"</h5>
+            <p>The all-in price — not just the brochure price. This includes stamp duty, registration, GST, and any extra charges. Also explains whether the payment plan is CLP (you pay as construction happens) or Subvention (builder pays your loan for some time).</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h5>Quality Assessment — "Here's our score and what drove it"</h5>
+            <p>The SafeNest Score™ and the Luxury Index™ — explained in plain language. What the builder did well, what was average, and why the numbers are what they are.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h5>Watch Items — "Here's what to keep an eye on"</h5>
+            <p>Things that are not necessarily dealbreakers — but things the buyer should know. Always score-triggered, never guessed. Maximum 4 Watch Items per report.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h5>Suitability — "Is this right for you?"</h5>
+            <p>A simple table showing whether this project suits someone who wants to <em>live there</em> versus someone who wants to <em>rent it out</em> or sell for profit later.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h5>FAQ — "Your top questions, answered"</h5>
+            <p>5–6 questions buyers always ask. Things like "Can I trust this builder?" or "What happens if the project is delayed?" These answers are pre-written — do not change them in the meeting.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">8</div>
+          <div class="step-body">
+            <h5>Next Steps — "What do you do now?"</h5>
+            <p>Maximum 3 action items. Simple, clear instructions for what the buyer should do before making a decision.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">9</div>
+          <div class="step-body">
+            <h5>Calculators — "Run the numbers yourself"</h5>
+            <p>Built-in tools in the report where the buyer can type in their own numbers and see the real cost, EMI, and 4-year financial picture.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- S4: SafeNest Score -->
+    <div class="section" id="s4">
+      <div class="sec-num">Section 04</div>
+      <h2 class="sec-title">The SafeNest Score™</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">The SafeNest Score is a number from 0 to 10. It tells you how good and safe a project is overall. Think of it as the project's final exam result.</p>
+
+      <div class="analogy">
+        <div class="icon">📊</div>
+        <p><strong>Imagine a school report card.</strong> Some subjects (like Maths) are more important than others (like Art). So they count for more marks. The SafeNest Score works the same way — each of the 8 things we check is worth a different percentage of the final score.</p>
+      </div>
+
+      <div class="card card-gold" style="margin-top:16px;">
+        <h4>The 8 Things We Check (and how much each matters)</h4>
+        <div style="margin-top:14px;">
+          <div class="weight-row"><span class="weight-label">Legal Papers & Land Title</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:18%"></div></div><span class="weight-pct">18%</span></div>
+          <div class="weight-row"><span class="weight-label">Construction Progress</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:18%"></div></div><span class="weight-pct">18%</span></div>
+          <div class="weight-row"><span class="weight-label">Builder's Track Record</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:15%"></div></div><span class="weight-pct">15%</span></div>
+          <div class="weight-row"><span class="weight-label">Location Quality</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:15%"></div></div><span class="weight-pct">15%</span></div>
+          <div class="weight-row"><span class="weight-label">Flat Quality & Design</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:12%"></div></div><span class="weight-pct">12%</span></div>
+          <div class="weight-row"><span class="weight-label">Money in Escrow (Safe?)</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:10%"></div></div><span class="weight-pct">10%</span></div>
+          <div class="weight-row"><span class="weight-label">JV / Land Ownership</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:10%"></div></div><span class="weight-pct">10%</span></div>
+          <div class="weight-row"><span class="weight-label">Demand & Resale Potential</span><div class="weight-bar-bg"><div class="weight-bar-fill" style="width:2%"></div></div><span class="weight-pct">2%</span></div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);margin:28px 0 12px;">What Each Score Means</h3>
+
+      <div class="verdict-grid">
+        <div class="verdict-card verdict-hf">
+          <div class="label">Highly Favorable</div>
+          <div class="range">8.0 – 10.0</div>
+          <div class="desc">Top marks across the board. Very strong project with few concerns. Rare to see in Hyderabad.</div>
+        </div>
+        <div class="verdict-card verdict-f">
+          <div class="label">Favorable</div>
+          <div class="range">6.5 – 7.9</div>
+          <div class="desc">A good, solid project. Some things to monitor, but nothing alarming. Most quality projects land here.</div>
+        </div>
+        <div class="verdict-card verdict-c">
+          <div class="label">Conditional</div>
+          <div class="range">5.0 – 6.4</div>
+          <div class="desc">Has real concerns. May still be the right choice for some buyers — but eyes wide open.</div>
+        </div>
+        <div class="verdict-card verdict-u">
+          <div class="label">Unfavorable</div>
+          <div class="range">0 – 4.9</div>
+          <div class="desc">Multiple serious concerns. SafeNest would not normally recommend pursuing this project.</div>
+        </div>
+      </div>
+
+      <div class="highlight" style="margin-top:20px;">
+        <h5>⚠ Two Important Caps — Always Remember These</h5>
+        <ul>
+          <li><strong>First-project builder cap:</strong> If a builder has never delivered a project before, their builder score is capped at 5 out of 10. We do not give full marks to someone with no track record.</li>
+          <li><strong>Booking data cap:</strong> The Demand & Resale score is capped at 5 out of 10 unless we have verified, real booking numbers. We do not count unverified claims from the builder.</li>
+        </ul>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);margin:28px 0 12px;">How to Explain the Score to a Buyer</h3>
+
+      <div class="script-box">
+        <div class="script-label">Say this → Highly Favorable (8.0+)</div>
+        <p>"This project scored 8.2 out of 10 on our SafeNest Score. That's a strong result — it means the legal papers are clean, the builder has a good history, and construction is progressing well. We call this 'Highly Favorable.'"</p>
+      </div>
+
+      <div class="script-box">
+        <div class="script-label">Say this → Conditional (5.0–6.4)</div>
+        <p>"This project scored 5.69 out of 10 — we call this 'Conditional.' It doesn't mean the project is bad. It means there are things you need to go in knowing. Let me walk you through what triggered that verdict, and then you can decide if it fits your situation."</p>
+      </div>
+    </div>
+
+    <!-- S5: Luxury Index -->
+    <div class="section" id="s5">
+      <div class="sec-num">Section 05</div>
+      <h2 class="sec-title">The Luxury Index™</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">The Luxury Index tells you what <em>type</em> of product this is — how premium the flat actually is, separate from whether it's safe or not. It's a score from 0 to 100.</p>
+
+      <div class="analogy">
+        <div class="icon">🏨</div>
+        <p><strong>Think of it like hotel star ratings.</strong> A 3-star hotel might be perfectly safe and clean. But a 5-star has bigger rooms, a better pool, and fancier fittings. The Luxury Index rates the "star level" of the flat — not whether the builder will deliver it.</p>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);margin:24px 0 12px;">The 5 Things That Make Up the Luxury Index</h3>
+      <p style="font-size:14px;color:var(--slate);line-height:1.75;margin-bottom:16px;">Each "Pillar" is worth up to 20 points. Total = 100 points.</p>
+
+      <div class="grid-2">
+        <div class="card card-gold">
+          <h4>🧱 Pillar 1 — Construction Quality</h4>
+          <p>What material was used to build the walls? Mivan (special aluminium moulds) scores highest. Also looks at ceiling height and how high the ground floor sits above road level (stilt height). Taller ceilings = more premium feeling.</p>
+        </div>
+        <div class="card card-gold">
+          <h4>👥 Pillar 2 — Density & Privacy</h4>
+          <p>How many flats per acre of land? How many flats share one floor? How many lifts are there? Fewer families sharing the same lift and corridor means more privacy and a quieter feel.</p>
+        </div>
+        <div class="card card-gold">
+          <h4>🏊 Pillar 3 — Amenities</h4>
+          <p>How much amenity space (clubhouse, gym, pool) is there per flat? How much open green space? Does the project have any special premium feature like a sky deck or golf putting green?</p>
+        </div>
+        <div class="card card-gold">
+          <h4>📐 Pillar 4 — Spatial Comfort</h4>
+          <p>How big is the smallest flat? How wide are the corridors (the hallways outside your door)? How tall are the doors? Wider corridors and taller doors feel more luxurious.</p>
+        </div>
+      </div>
+      <div class="card card-gold" style="margin-top:0;">
+        <h4>🚗 Pillar 5 — Infrastructure</h4>
+        <p>How many car parking spots per flat? How many floors in the towers? And how much land is there per flat? More land per flat = more room, greenery, and breathing space.</p>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);margin:24px 0 12px;">The 4 Segment Bands</h3>
+
+      <table class="score-table">
+        <thead><tr><th>Score</th><th>Segment</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">&gt; 85</td><td><span class="badge badge-navy">Ultra Luxury</span></td><td>Exceptional in every single pillar. Extremely rare in Hyderabad.</td></tr>
+          <tr><td class="bold">70 – 85</td><td><span class="badge badge-gold">Luxury</span></td><td>Strong specs + exclusivity. This is the main segment SafeNest advises on.</td></tr>
+          <tr><td class="bold">45 – 70</td><td><span class="badge badge-green">Premium</span></td><td>Better than normal market. Good product — but not exceptional in all areas.</td></tr>
+          <tr><td class="bold">≤ 45</td><td><span class="badge badge-amber">Standard</span></td><td>Regular market specs. Basic amenities. Nothing exceptional.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sample-header" style="margin-top:20px;">VIAN MRIDA — Real Example</div>
+      <div class="sample-body">
+        <p style="font-size:13.5px;color:var(--slate);margin-bottom:14px;">Luxury Index: <strong>68.0</strong> → <span class="badge badge-green">Premium</span></p>
+        <div class="pillars">
+          <div class="pillar-bar">
+            <div class="bar-wrap"><div class="bar-fill" style="height:93%;background:var(--gold);"></div></div>
+            <div class="p-score">18.67</div><div class="p-max">/20</div>
+            <div class="p-name">Amenities</div>
+          </div>
+          <div class="pillar-bar">
+            <div class="bar-wrap"><div class="bar-fill" style="height:73%;background:var(--amber);"></div></div>
+            <div class="p-score">14.67</div><div class="p-max">/20</div>
+            <div class="p-name">Construction</div>
+          </div>
+          <div class="pillar-bar">
+            <div class="bar-wrap"><div class="bar-fill" style="height:73%;background:var(--amber);"></div></div>
+            <div class="p-score">14.67</div><div class="p-max">/20</div>
+            <div class="p-name">Spatial</div>
+          </div>
+          <div class="pillar-bar">
+            <div class="bar-wrap"><div class="bar-fill" style="height:53%;background:var(--slate);"></div></div>
+            <div class="p-score">10.67</div><div class="p-max">/20</div>
+            <div class="p-name">Density</div>
+          </div>
+          <div class="pillar-bar">
+            <div class="bar-wrap"><div class="bar-fill" style="height:47%;background:var(--red);opacity:0.7;"></div></div>
+            <div class="p-score">9.33</div><div class="p-max">/20</div>
+            <div class="p-name">Infrastructure</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--slate);margin-top:12px;line-height:1.65;">Strong amenity score pulls the index up. Infrastructure and Density hold it back from reaching Luxury tier (70+). Positioned well as a premium offering, not ultra-luxury.</p>
+      </div>
+    </div>
+
+    <!-- S6: Risk Score -->
+    <div class="section" id="s6">
+      <div class="sec-num">Section 06</div>
+      <h2 class="sec-title">The Risk Score</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">The Risk Score is an internal number only you can see. Buyers never see the actual number — only the verdict label.</p>
+
+      <div class="analogy">
+        <div class="icon">🔄</div>
+        <p><strong>This score works backwards from what you expect.</strong> Normally, 10 out of 10 is the best. Here, <strong>10 means SAFEST</strong> and 1 means most risky. So a high Risk Score is a good thing. It's like a safety inspection — 10 means "this car is perfectly safe to drive."</p>
+      </div>
+
+      <div class="warn-box">
+        <p><strong>Important:</strong> The Risk Score is the average of 7 different checks. Each one looks at something that could go wrong — court cases, RERA delays, the builder's reputation, the land ownership situation, construction progress, whether the money is protected, and past delivery delays.</p>
+      </div>
+
+      <table class="score-table" style="margin-top:16px;">
+        <thead><tr><th>Risk Score</th><th>Verdict</th><th>What it means in plain words</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">7.5 – 10.0</td><td><span class="badge badge-green">Low Risk</span></td><td>Very few concerns. This project looks clean from a risk perspective.</td></tr>
+          <tr><td class="bold">5.5 – 7.4</td><td><span class="badge badge-amber">Moderate Risk</span></td><td>Some things to watch. Not alarming, but the buyer should be aware.</td></tr>
+          <tr><td class="bold">3.5 – 5.4</td><td><span class="badge badge-red" style="background:var(--redp);color:var(--red);">High Risk</span></td><td>Real concerns. The buyer must fully understand what they're walking into.</td></tr>
+          <tr><td class="bold">0 – 3.4</td><td><span class="badge" style="background:#2a0a06;color:#ff6b5a;">Critical Risk</span></td><td>Multiple serious red flags. SafeNest would not normally present this project.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="never-box" style="margin-top:16px;">
+        <p>🚫 Never show the buyer the Risk Score number (e.g. "5.57"). Only say the verdict label: "Moderate Risk." The individual sub-scores are for advisor intelligence only.</p>
+      </div>
+
+      <div class="script-box">
+        <div class="script-label">Say this → Moderate Risk</div>
+        <p>"Our risk assessment found this project to be at Moderate Risk level. This is not unusual for a project at Foundation Stage with a first-time builder. Let me show you exactly what that means and what protections are in place."</p>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- S7: Sections Guide -->
+    <div class="section" id="s7">
+      <div class="sec-num">Section 07</div>
+      <h2 class="sec-title">Walking Through the Report — Section by Section</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Here's how to walk a buyer through each section of the D3 in a real meeting. Use this as your running order.</p>
+
+      <div class="card card-gold" style="margin-bottom:12px;">
+        <h4>Start with the Vision Block — always</h4>
+        <p>Before you show any scores or numbers, read the Vision Block out loud. Slowly. Let the buyer picture themselves in the home. This sets an emotional foundation before the analytical discussion. The D3 is designed to help them decide — it starts with heart, then moves to head.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <h4>Basic Facts — 2 minutes, quick confirmation</h4>
+        <p>Go through the facts rapidly. Ask: "Does all of this match what you know about the project?" If anything surprises them, stop and clarify. Don't rush past something the buyer questions.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <h4>Price & Payment Plan — slow down here</h4>
+        <p>Many buyers have only seen the brochure price. The all-in price is often 15–20% higher. Show them the real number calmly. Don't apologise for it. Say: "This is what it actually costs when you account for everything." Then walk through the payment plan — when do they pay, how much, and when does their loan start?</p>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <h4>Quality Assessment — explain the score simply</h4>
+        <p>Show the SafeNest Score and the Luxury Index. Use the simple language from Section 04 and 05 of this guide. For every score, say what drove it — "The amenities scored highest because this project has 150 sqft of clubhouse space per flat, which is excellent."</p>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <h4>Watch Items — be matter-of-fact, not scary</h4>
+        <p>Walk through each Watch Item one by one. For each one, say what it is, why it showed up, and what it means for the buyer. Do not say "this is a red flag." Do not downplay it either. Say: "This is something to be aware of. Here is what it means practically."</p>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <h4>Suitability Table — personalise this</h4>
+        <p>Look at the table. Then look at the buyer in front of you. If they are an end-user (they want to live there), say "The report shows this project is a good fit for end-users, which matches your situation." If they are an investor, walk through the investor column honestly — including any gaps.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <h4>FAQ — read out the questions, not the answers</h4>
+        <p>Ask the buyer "Do any of these questions resonate with you?" Let them pick. Then open the FAQ answer for that question. Don't read through all 5–6 questions if the buyer isn't asking them. Use the FAQ as a reference, not a lecture.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <h4>Next Steps — end with clarity</h4>
+        <p>The report gives a maximum of 3 next steps. Read them out. Ask the buyer: "Which of these feels manageable for you in the next week?" Turn the next step into a concrete commitment — "Shall we schedule the site visit for Saturday?"</p>
+      </div>
+    </div>
+
+    <!-- S8: Watch Items -->
+    <div class="section" id="s8">
+      <div class="sec-num">Section 08</div>
+      <h2 class="sec-title">Watch Items Explained</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Watch Items are things the report flags for the buyer to be aware of. They are NOT necessarily dealbreakers. They appear automatically based on the scores — not on your personal opinion.</p>
+
+      <div class="analogy">
+        <div class="icon">🚦</div>
+        <p><strong>Think of Watch Items like the warning lights in a car.</strong> The oil light doesn't mean your car will explode right now. It means: be aware of this, check it, and deal with it before it becomes a real problem. Same here.</p>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);margin:20px 0 12px;">What Triggers a Watch Item</h3>
+
+      <table class="score-table">
+        <thead><tr><th>Watch Item</th><th>Triggered When</th><th>What to say</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">First-project builder</td><td>Builder Track Score &lt; 6</td><td>"This builder hasn't delivered a project before. That's not unusual, but it means we have no track record to check."</td></tr>
+          <tr><td class="bold">Early construction stage</td><td>Construction Score ≤ 4</td><td>"The project is still in early stages. The possession date is further away, and more can change in that time."</td></tr>
+          <tr><td class="bold">Complex land ownership (JV)</td><td>JV Score &lt; 7</td><td>"The builder doesn't own the land — they've partnered with landowners. This adds a layer of complexity."</td></tr>
+          <tr><td class="bold">Money protection concern</td><td>Escrow Score &lt; 7</td><td>"We want to see 70%+ of buyer money held in a protected account. This project's escrow setup needs closer attention."</td></tr>
+          <tr><td class="bold">Legal papers concern</td><td>Legal Score &lt; 7</td><td>"There are some questions around the land title or legal status. We recommend a lawyer review before booking."</td></tr>
+          <tr><td class="bold">Long handover timeline</td><td>Possession &gt; 30 months from now</td><td>"Handover is more than 2.5 years away. That's a long time. Make sure your housing plan works with that timeline."</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warn-box" style="margin-top:16px;">
+        <p><strong>Rule:</strong> Maximum 4 Watch Items in any D3. If more than 4 things are flagged by the scores, we include only the 4 most important. The report is never a list of complaints — it is a focused, honest brief.</p>
+      </div>
+
+      <div class="sample-header" style="margin-top:20px;">VIAN MRIDA — Watch Items in This Report</div>
+      <div class="sample-body">
+        <ul class="rule-list">
+          <li>First project for IRA Vian Properties — no delivery track record to verify</li>
+          <li>Currently at Foundation Stage — 36 months to possession from Agreement of Sale</li>
+          <li>3-landowner JV with undisclosed revenue sharing between builder and landowners</li>
+          <li>Ceiling height of ~9.7 ft is unconfirmed — could not be verified from documents alone</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- S9: Suitability -->
+    <div class="section" id="s9">
+      <div class="sec-num">Section 09</div>
+      <h2 class="sec-title">The Suitability Table</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Not every project is right for every buyer. The Suitability Table gives you an honest, structured way to talk about fit.</p>
+
+      <div class="analogy">
+        <div class="icon">👓</div>
+        <p><strong>Think of it like a job interview match.</strong> A candidate might be excellent — but if the job needs someone in Bangalore and the candidate only wants to work in Mumbai, it's not a fit. The project quality doesn't change. The fit changes based on the person.</p>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px;">
+        <div class="card card-green">
+          <h4>End User ← Wants to live there</h4>
+          <p style="font-size:13.5px;color:var(--slate);line-height:1.7;">Ask: Will they move in? Is the location convenient for their work and family? Does the flat size match their life? Is the possession timeline acceptable? End users care more about how the home feels than how it performs financially.</p>
+        </div>
+        <div class="card card-gold">
+          <h4>Investor ← Wants to earn from it</h4>
+          <p style="font-size:13.5px;color:var(--slate);line-height:1.7;">Ask: Is there rental demand in this micro-market? Is the price appreciation potential good? Is the unit size and type something tenants want? Investors care less about ceiling height and more about CAGR and liquidity.</p>
+        </div>
+      </div>
+
+      <div class="highlight" style="margin-top:16px;">
+        <h5>How to Use This in a Meeting</h5>
+        <ul>
+          <li>Ask the buyer upfront: "Are you planning to live here yourself, or is this an investment?"</li>
+          <li>Once you know — jump to that column in the suitability table</li>
+          <li>Never read both columns as if both are equally relevant</li>
+          <li>If they're unsure — walk both columns and let them see which resonates</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- S10: Hard Questions -->
+    <div class="section" id="s10">
+      <div class="sec-num">Section 10</div>
+      <h2 class="sec-title">Hard Questions & What to Say</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Buyers will ask tough questions. Some will try to catch you out. Here are the 5 most common hard questions — and exactly what to say.</p>
+
+      <div class="card card-gold" style="margin-bottom:16px;">
+        <h4>"You get paid by the builder. Why should I trust you?"</h4>
+        <div class="script-box" style="margin:12px 0 0;">
+          <div class="script-label">Say this</div>
+          <p>"That's a fair question, and I'm glad you asked it. Yes, we earn a commission from the developer. But here's the thing — we earn the same amount no matter which project you choose. We have no financial reason to push you towards any one project. Our business runs on you telling your friends and family that we gave you honest advice. If we misled you, that's over. Our interest is in your trust, not your booking."</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h4>"The score says Conditional. Should I walk away?"</h4>
+        <div class="script-box" style="margin:12px 0 0;">
+          <div class="script-label">Say this</div>
+          <p>"Not necessarily. Conditional means there are things to go in knowing — not that the project is bad. Let me tell you what drove that verdict. Once you understand those specific things, you can decide if they are acceptable for your situation. For some buyers, a Conditional project at a lower price point is the right call. For others, it's not. Let's look at the Watch Items together."</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h4>"Builder X told me this project is better than anything else in Kollur."</h4>
+        <div class="script-box" style="margin:12px 0 0;">
+          <div class="script-label">Say this</div>
+          <p>"Of course they did — they're selling it. Our job is different. We've scored this project on 8 objective criteria — same criteria we use on every project. The score doesn't have an opinion. Let me show you how this project compares to others in the same micro-market on each of those criteria."</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h4>"Can you negotiate the price for me?"</h4>
+        <div class="script-box" style="margin:12px 0 0;">
+          <div class="script-label">Say this</div>
+          <p>"We don't negotiate on behalf of buyers — that's not our role. What we can do is help you understand exactly what the price includes, whether it's all-in or not, and what comparable projects have sold for. That knowledge puts you in a much stronger position to have that conversation yourself — or through your legal advisor."</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <h4>"The builder says 90% is already sold. Is that true?"</h4>
+        <div class="script-box" style="margin:12px 0 0;">
+          <div class="script-label">Say this</div>
+          <p>"Builders often share these numbers — and they're not always verified. We score demand and liquidity conservatively. Unless we have confirmed RERA booking numbers, we cap that score at 5 out of 10. In this report, we've reflected what we could verify. I'd encourage you not to make a decision based on urgency created by that claim."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S11: What to Share -->
+    <div class="section" id="s11">
+      <div class="sec-num">Section 11</div>
+      <h2 class="sec-title">What You Can & Can't Share With Buyers</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Some information in the D3 is for your eyes only. Other parts are made specifically for buyers. Knowing the difference is critical.</p>
+
+      <div class="do-dont">
+        <div class="do-col">
+          <h5>✓ Safe to share with buyers</h5>
+          <ul>
+            <li>SafeNest Score™ and Quality Verdict</li>
+            <li>Luxury Index™ and Product Segment</li>
+            <li>Risk Verdict (the label — not the number)</li>
+            <li>All project facts (name, RERA, price, size, floor count)</li>
+            <li>Watch Items (the buyer-friendly explanations)</li>
+            <li>Suitability Table</li>
+            <li>FAQ and Next Steps</li>
+            <li>Vision Block and Final Verdict</li>
+          </ul>
+        </div>
+        <div class="dont-col">
+          <h5>✗ Never show buyers</h5>
+          <ul>
+            <li>Internal Risk Score number (e.g., "5.57")</li>
+            <li>Individual risk sub-scores (e.g., Risk_JV_Structure: 4)</li>
+            <li>JV Intelligence section (landowner deals, revenue splits)</li>
+            <li>Scoring Rationale notes (advisor working notes)</li>
+            <li>Litigation Flag details</li>
+            <li>Escrow bank details (internal)</li>
+            <li>Title Type specifics</li>
+            <li>Luxury Index pillar breakdown scores</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="never-box" style="margin-top:8px;">
+        <p>🚫 Credit rating language is permanently banned. Never use the words "credit rating," "A-rated," "AAA," or any rating agency language. SafeNest is not a rating agency. This is a firm legal and regulatory requirement.</p>
+      </div>
+    </div>
+
+    <!-- S12: Meeting Flow -->
+    <div class="section" id="s12">
+      <div class="sec-num">Section 12</div>
+      <h2 class="sec-title">The 9-Step Meeting Flow</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">A typical D3 buyer meeting takes 60–90 minutes. Follow this structure. Don't skip steps — each one builds on the last.</p>
+
+      <ol class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h5>Welcome & Set Expectations</h5>
+            <p>"Today I'm going to walk you through our full research on [Project Name]. We'll look at everything — the good, the concerns, the financials. At the end, you'll have a clear picture to make your own decision. No pressure today."</p>
+            <span class="step-time">5 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h5>Understand the Buyer</h5>
+            <p>Ask: Are they buying to live there or invest? What's their budget (including all costs)? When do they need the home? Do they have any non-negotiables? This shapes everything that follows.</p>
+            <span class="step-time">10 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h5>Open the D3 — Vision Block First</h5>
+            <p>Open the report on screen or hand them the printed version. Read the Vision Block aloud. Let it sink in. Do not rush to the scores.</p>
+            <span class="step-time">5 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h5>Basic Facts & Price</h5>
+            <p>Confirm the facts. Walk through the all-in price. Show the payment plan. Let them ask questions here.</p>
+            <span class="step-time">10 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h5>SafeNest Score™ & Luxury Index™</h5>
+            <p>Explain the score in simple terms (use the scripts from Section 04 and 05). For each, say what drove it — not just the number.</p>
+            <span class="step-time">15 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h5>Walk Through Watch Items</h5>
+            <p>Take each Watch Item one by one. Matter-of-fact. Not alarming. Explain what it is, why it showed up, and what it means practically for them.</p>
+            <span class="step-time">10 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h5>Suitability & FAQ</h5>
+            <p>Match the suitability table to their profile (end-user or investor). Then check if any FAQ questions resonate — answer only the ones they care about.</p>
+            <span class="step-time">10 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">8</div>
+          <div class="step-body">
+            <h5>Final Verdict & Summary</h5>
+            <p>Read the Final Verdict from the report. Then give your own one-sentence summary of fit: "Based on what you've told me about your situation, here's how I see this project for you."</p>
+            <span class="step-time">5 minutes</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">9</div>
+          <div class="step-body">
+            <h5>Next Steps — Concrete Commitment</h5>
+            <p>Walk through the 3 next steps. Ask which one they'll do first. Lock in a specific action: "Shall we book the site visit for Saturday morning?" End on a clear plan, not a vague "let me know."</p>
+            <span class="step-time">5–10 minutes</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- S13: Quick Ref -->
+    <div class="section" id="s13">
+      <div class="sec-num">Section 13</div>
+      <h2 class="sec-title">Vian Mrida — Quick Reference Card</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">This is a ready-reference card for the sample project used throughout this training. Use it to check your understanding of the concepts above.</p>
+
+      <div class="quick-ref">
+        <h4>Vian Mrida by IRA Vian Properties</h4>
+        <div class="qr-row"><span class="qr-label">SafeNest Score™</span><span class="qr-val">5.69 / 10 — <span style="color:var(--amber)">Conditional</span></span></div>
+        <div class="qr-row"><span class="qr-label">Risk Verdict</span><span class="qr-val"><span style="color:var(--amber)">Moderate Risk</span> (internal: 5.57)</span></div>
+        <div class="qr-row"><span class="qr-label">Luxury Index™</span><span class="qr-val">68.0 — <span style="color:var(--gold)">Premium</span></span></div>
+        <div class="qr-row"><span class="qr-label">RERA Number</span><span class="qr-val">P01100009333 (Active)</span></div>
+        <div class="qr-row"><span class="qr-label">Developer</span><span class="qr-val">IRA Vian Properties (First Project)</span></div>
+        <div class="qr-row"><span class="qr-label">Construction Stage</span><span class="qr-val">Foundation Stage</span></div>
+        <div class="qr-row"><span class="qr-label">Possession</span><span class="qr-val">36 months from Agreement of Sale</span></div>
+        <div class="qr-row"><span class="qr-label">All-In Price Range</span><span class="qr-val">₹1.13 Cr – ₹2.10 Cr</span></div>
+        <div class="qr-row"><span class="qr-label">Base Price</span><span class="qr-val">₹6,600 per sqft</span></div>
+        <div class="qr-row"><span class="qr-label">Payment Plan</span><span class="qr-val">CLP only (20% — 70% — 10%)</span></div>
+        <div class="qr-row"><span class="qr-label">Approved Banks</span><span class="qr-val">HDFC, Axis, Kotak</span></div>
+        <div class="qr-row"><span class="qr-label">Escrow Setup</span><span class="qr-val">3-account Axis Bank, 70% ring-fenced</span></div>
+        <div class="qr-row"><span class="qr-label">Watch Items Count</span><span class="qr-val">4 items</span></div>
+      </div>
+
+      <div class="highlight" style="margin-top:16px;">
+        <h5>The 4 Watch Items — Vian Mrida</h5>
+        <ul>
+          <li>First-project developer — no delivery track record</li>
+          <li>Foundation Stage — long way to go to possession</li>
+          <li>3-landowner JV — revenue sharing undisclosed</li>
+          <li>Ceiling height ~9.7 ft — could not be confirmed from documents</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- S14: Rules -->
+    <div class="section" id="s14">
+      <div class="sec-num">Section 14</div>
+      <h2 class="sec-title">Non-Negotiable Rules</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">These are the rules you must never break. Not "guidelines." Not "usually." Never.</p>
+
+      <ul class="rule-list">
+        <li>Never show the Risk Score number to a buyer. Only the verdict label.</li>
+        <li>Never show individual risk sub-scores to a buyer.</li>
+        <li>Never show the JV Intelligence section to a buyer.</li>
+        <li>Never use the words "credit rating," "AAA," "A-rated," or any rating agency language.</li>
+        <li>Never enter data into Airtable formula fields — formulas calculate automatically.</li>
+        <li>Never use RERA portal construction percentages — score construction stage only from physical site evidence.</li>
+        <li>Never fabricate RERA registration numbers, company data, or legal details.</li>
+        <li>Never use alarm language in a report ("red flag," "danger," "stay away").</li>
+        <li>Never recommend one project over another — only show profile match.</li>
+        <li>Never share the D3 link with anyone other than the intended buyer.</li>
+        <li>Never type "N/A" in Premium Feature fields — leave blank if standard.</li>
+        <li>Never enter Corridor Width or Door Height in Premium Feature fields — those have their own fields.</li>
+        <li>Never give Demand/Liquidity Score above 5 without verified booking numbers.</li>
+        <li>Never give Developer Track Score above 5 for a first-project builder.</li>
+        <li>Never promise a buyer something that is not written in the D3 report.</li>
+      </ul>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- GLOSSARY -->
+    <div class="section" id="glossary">
+      <div class="sec-num">Reference</div>
+      <h2 class="sec-title">Glossary of Terms</h2>
+      <div class="divider"></div>
+      <p class="sec-intro">Every technical word used in SafeNest — explained in the simplest possible language. Alphabetical order.</p>
+
+      <div class="glossary-grid">
+
+        <div class="glossary-letter">A</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Agreement of Sale (AOS)</div>
+          <div class="glossary-def">The legal paper you sign with the builder when you agree to buy a flat. The possession date is usually counted from this date — e.g., "36 months from AOS."</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">All-In Price</div>
+          <div class="glossary-def">The real total cost of buying a flat — includes the base price, stamp duty, registration charges, GST, and any other charges. Always higher than the brochure price. SafeNest always shows all-in prices.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Amenity Area</div>
+          <div class="glossary-def">The shared spaces in a project — swimming pool, gym, clubhouse, jogging track, etc. Measured in square feet. The more amenity space per flat, the better.</div>
+        </div>
+
+        <div class="glossary-letter">B</div>
+        <div class="glossary-item">
+          <div class="glossary-term">BHK</div>
+          <div class="glossary-def">Bedroom, Hall, Kitchen. A 3BHK flat has 3 bedrooms, 1 hall, and 1 kitchen. A 4BHK has 4 bedrooms, and so on.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Builder / Developer</div>
+          <div class="glossary-def">The company building the project. Sometimes they own the land, sometimes they've partnered with landowners. Not the same as the landowner in a JV project.</div>
+        </div>
+
+        <div class="glossary-letter">C</div>
+        <div class="glossary-item">
+          <div class="glossary-term">CAGR</div>
+          <div class="glossary-def">Compound Annual Growth Rate. How much a property's value is expected to grow each year, on average. A CAGR of 12% means the price doubles roughly every 6 years.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Ceiling Height</div>
+          <div class="glossary-def">How tall the room is from floor to ceiling. Measured in feet. 10 ft feels spacious. 9 ft feels normal. 8.5 ft feels low. Premium projects usually have 10 ft or more.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">CLP (Construction-Linked Plan)</div>
+          <div class="glossary-def">A payment plan where you pay the builder as the construction progresses. You pay more as each stage is completed — not all upfront. Most common payment plan in Hyderabad.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Commission</div>
+          <div class="glossary-def">The payment SafeNest earns from the developer when a buyer purchases a project through our advisory. Fixed rate — same no matter which project is chosen.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Conditional (Verdict)</div>
+          <div class="glossary-def">A SafeNest Score verdict for projects scoring 5.0–6.4 out of 10. Not necessarily bad — but there are real concerns the buyer must fully understand before proceeding.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Construction Stage</div>
+          <div class="glossary-def">How far along the building work has progressed. SafeNest scores only what an advisor sees on-site — never what the RERA portal says. Five stages: Foundation, Structure WIP &lt;50%, Structure WIP &gt;50%, Finishing, OC.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Corridor Width</div>
+          <div class="glossary-def">The width of the shared hallway outside your flat door. A wider corridor feels more hotel-like. Measured in feet. 8 ft+ is considered good. Has its own field — never put this in Premium Features.</div>
+        </div>
+
+        <div class="glossary-letter">D</div>
+        <div class="glossary-item">
+          <div class="glossary-term">D1 Report</div>
+          <div class="glossary-def">The Comparison Report — compares 2–3 shortlisted projects side by side for a buyer. Shorter than the D3, and always free. Delivered via WhatsApp by the advisor.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">D3 Report</div>
+          <div class="glossary-def">The Deep Research Report — a full investigation of one project. Priced at ₹4,999 or free with an advisory session. The main tool used in buyer meetings.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Density</div>
+          <div class="glossary-def">How many flats are packed into each acre of land. Fewer flats per acre = more space, privacy, and greenery. The Luxury Index rewards lower density.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Door Height</div>
+          <div class="glossary-def">How tall the main doors in the flat are. 8 ft is standard. 9 ft feels grand. Has its own field in the schema — never put this in Premium Features.</div>
+        </div>
+
+        <div class="glossary-letter">E</div>
+        <div class="glossary-item">
+          <div class="glossary-term">EMI</div>
+          <div class="glossary-def">Equated Monthly Instalment. The fixed monthly amount you pay to the bank for your home loan. Calculated based on loan amount, interest rate, and tenure.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">End User</div>
+          <div class="glossary-def">A buyer who plans to live in the flat themselves — not rent it out or sell it for profit. End users care more about daily life quality (location, size, amenities) than investment returns.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Escrow Account</div>
+          <div class="glossary-def">A special bank account where buyer payments are held safely — separate from the builder's regular accounts. RERA requires builders to deposit 70% of buyer money into escrow. It protects buyers if the builder runs into financial trouble.</div>
+        </div>
+
+        <div class="glossary-letter">F</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Favorable (Verdict)</div>
+          <div class="glossary-def">A SafeNest Score verdict for projects scoring 6.5–7.9 out of 10. A solid, good-quality project with some things to monitor but nothing alarming.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Foundation Stage</div>
+          <div class="glossary-def">The very beginning of construction — digging the ground, laying the base structure. The highest-risk stage because the building is far from complete. Construction Score for this stage: 2 out of 10.</div>
+        </div>
+
+        <div class="glossary-letter">G</div>
+        <div class="glossary-item">
+          <div class="glossary-term">GST</div>
+          <div class="glossary-def">Goods and Services Tax. For under-construction flats in India, GST is 5% of the base price. Paid by the buyer on top of the flat price. Not charged on completed (OC-received) projects.</div>
+        </div>
+
+        <div class="glossary-letter">H</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Highly Favorable (Verdict)</div>
+          <div class="glossary-def">The top SafeNest Score verdict for projects scoring 8.0 or above out of 10. Strong project with very few concerns. Rare in Hyderabad's market.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">HMDA</div>
+          <div class="glossary-def">Hyderabad Metropolitan Development Authority. The government body that approves building layouts and land use in and around Hyderabad. HMDA approval is required before construction can legally start.</div>
+        </div>
+
+        <div class="glossary-letter">I</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Investor</div>
+          <div class="glossary-def">A buyer who plans to earn money from the property — either by renting it out or selling it later at a profit. Investors care more about price appreciation potential and rental demand than how the home feels to live in.</div>
+        </div>
+
+        <div class="glossary-letter">J</div>
+        <div class="glossary-item">
+          <div class="glossary-term">JV (Joint Venture)</div>
+          <div class="glossary-def">When the builder does not own the land — they've made a deal with the landowners to develop it together and share the revenue. Adds complexity because there are more parties involved. JV details are never shown to buyers.</div>
+        </div>
+
+        <div class="glossary-letter">L</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Land Title</div>
+          <div class="glossary-def">The legal proof that the builder has the right to build on this land. A clean title means no court cases, no disputes, no mortgages. An unclear title is a serious red flag.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Lifts Per Tower</div>
+          <div class="glossary-def">How many lifts (elevators) are in each residential tower. More lifts = shorter wait time and more privacy. The Luxury Index calculates how many flats share each lift.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Luxury Index™</div>
+          <div class="glossary-def">SafeNest's 0–100 score for how premium a project's specifications are. Made up of 5 pillars: Construction, Density, Amenities, Spatial Comfort, and Infrastructure. Tells you the "star rating" of the flat — separate from safety.</div>
+        </div>
+
+        <div class="glossary-letter">M</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Micro-Market</div>
+          <div class="glossary-def">A specific neighbourhood or area within Hyderabad. SafeNest covers 6 micro-markets: Kokapet, Kollur, Tellapur, Mokila, Narsingi, and Patancheru — all along the ORR corridor in West Hyderabad.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Mivan</div>
+          <div class="glossary-def">A premium construction technique using aluminium moulds instead of traditional brick and concrete. Produces smoother walls, faster construction, and greater structural strength. Always spelled "Mivan" with a capital M in SafeNest's system. Scores 10/10 in the Construction Pillar.</div>
+        </div>
+
+        <div class="glossary-letter">O</div>
+        <div class="glossary-item">
+          <div class="glossary-term">OC (Occupancy Certificate)</div>
+          <div class="glossary-def">The government certificate that says a building is safe to live in. Issued after construction is complete and all checks are done. Without OC, you legally cannot move in. Getting OC is the final stage of construction — and when GST stops applying.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Open Space Ratio</div>
+          <div class="glossary-def">The percentage of the project's total land that is open — gardens, parks, walkways — rather than built on. 75%+ is excellent. More open space means a greener, more breathing environment.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">ORR</div>
+          <div class="glossary-def">Outer Ring Road — the major highway that encircles Hyderabad. The ORR corridor in West Hyderabad (from Narsingi to Patancheru) is where most of SafeNest's covered projects are located. Good ORR connectivity is a key location factor.</div>
+        </div>
+
+        <div class="glossary-letter">P</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Parking Ratio</div>
+          <div class="glossary-def">The number of covered parking spots per flat. A ratio of 1.0 means one parking spot per flat. 1.5 means one and a half spots per flat on average. 2.0 is considered premium. Calculated automatically — never entered manually.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Pillar (Luxury Index)</div>
+          <div class="glossary-def">One of the 5 categories that make up the Luxury Index. Each pillar is worth up to 20 points. The 5 pillars are: Construction Quality, Density & Privacy, Amenities, Spatial Comfort, and Infrastructure.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Pre-EMI Interest</div>
+          <div class="glossary-def">The interest you pay to the bank on your loan during the construction period — before you start paying proper EMIs. With CLP plans, pre-EMI can add significant cost. The D3 calculator shows this clearly.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Product Segment</div>
+          <div class="glossary-def">The category a project falls into based on its Luxury Index score: Standard (≤45), Premium (45–70), Luxury (70–85), or Ultra Luxury (&gt;85). Automatically calculated — never manually assigned.</div>
+        </div>
+
+        <div class="glossary-letter">R</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Registration Charges</div>
+          <div class="glossary-def">The government fee to officially register property in your name. In Telangana, total registration cost is 7.5% of the property value (5.5% stamp duty + 1.5% transfer + 0.5% registration). Always included in the all-in price.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">RERA</div>
+          <div class="glossary-def">Real Estate Regulatory Authority. The government body that regulates builders and protects buyers. Every project must register with RERA before selling flats. The RERA number lets you verify project details on the official government website.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Risk Score</div>
+          <div class="glossary-def">SafeNest's internal score for how risky a project is. Scored from 0 to 10 — but it works backwards (10 = safest, 0 = most risky). Average of 7 different risk checks. Never shown to buyers as a number.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Risk Verdict</div>
+          <div class="glossary-def">The label version of the Risk Score — what advisors share with buyers. Four levels: Low Risk (≥7.5), Moderate Risk (5.5–7.4), High Risk (3.5–5.4), Critical Risk (&lt;3.5).</div>
+        </div>
+
+        <div class="glossary-letter">S</div>
+        <div class="glossary-item">
+          <div class="glossary-term">SafeNest Score™</div>
+          <div class="glossary-def">SafeNest's main project score — a number from 0 to 10. Combines 8 weighted factors (legal, developer, construction, location, product, escrow, JV structure, demand) into a single overall rating. The higher the better.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Stamp Duty</div>
+          <div class="glossary-def">A government tax paid when buying property. In Telangana, stamp duty is 5.5% of the property value. Paid once, at the time of registration. Part of the all-in price calculation.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Stilt Height</div>
+          <div class="glossary-def">How high the ground floor of the building sits above road level. The open ground level (called "stilt") is usually used for parking. Taller stilt = better ventilation, flood protection, and visual grandeur. Measured in feet.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Subvention Plan</div>
+          <div class="glossary-def">A payment plan where the builder pays the interest on your home loan during the construction period. Sounds attractive — but subvention projects are priced 8–12% higher to cover this cost. The D3 calculator shows the real economics.</div>
+        </div>
+
+        <div class="glossary-letter">T</div>
+        <div class="glossary-item">
+          <div class="glossary-term">RERA Units</div>
+          <div class="glossary-def">The total number of flats/villas in a project as registered with RERA. Used to calculate density, parking ratio, and amenity space per flat. Always the RERA number — not what the builder claims in their brochure.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">TSRERA</div>
+          <div class="glossary-def">Telangana State Real Estate Regulatory Authority — the state-level RERA body for Hyderabad projects. The official source for verifying project registration, approvals, and status.</div>
+        </div>
+
+        <div class="glossary-letter">U</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Ultra Luxury</div>
+          <div class="glossary-def">The highest product segment in SafeNest's Luxury Index — projects scoring above 85 out of 100. Exceptional across all 5 pillars. Extremely rare in Hyderabad's current market.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Unfavorable (Verdict)</div>
+          <div class="glossary-def">The lowest SafeNest Score verdict — for projects scoring below 5.0. Multiple serious concerns. SafeNest would not normally present such a project to buyers.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">Units Per Floor</div>
+          <div class="glossary-def">How many flats share each floor of a tower. 2 flats per floor is very exclusive. 10+ flats per floor starts to feel like a crowded apartment building. Fewer units per floor = more privacy and quieter corridors.</div>
+        </div>
+
+        <div class="glossary-letter">V</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Vision Block</div>
+          <div class="glossary-def">The opening section of every D3 report — four sentences that describe daily life in the project in simple, honest language. Always read aloud at the start of a buyer meeting. Sets the emotional tone before the data.</div>
+        </div>
+
+        <div class="glossary-letter">W</div>
+        <div class="glossary-item">
+          <div class="glossary-term">Watch Item</div>
+          <div class="glossary-def">Something in a project that the buyer should be aware of — triggered automatically when a score falls below a threshold. Not necessarily a dealbreaker. Maximum 4 per D3 report. Presented matter-of-factly, never with alarm language.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="border-top:2px solid var(--navy);padding-top:28px;margin-top:20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);font-weight:600;">SafeNest Advisory</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;">Advisor Training Guide · Schema v2.7 · Plain English Edition</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:right;">CONFIDENTIAL — ADVISOR USE ONLY<br>Not for distribution to buyers or third parties</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 24;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+
+  // Scroll spy
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 80) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
